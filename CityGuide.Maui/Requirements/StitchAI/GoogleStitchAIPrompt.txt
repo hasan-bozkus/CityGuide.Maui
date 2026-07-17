@@ -1,0 +1,379 @@
+﻿﻿Design a complete mobile travel guide application called "Milano City Guide".
+
+The application is focused entirely on the city of Milan, Italy and should help tourists discover the city before and during their trip.
+
+Design style:
+
+* Modern and premium travel application
+* Inspired by Airbnb, Booking.com and Google Travel
+* Clean, elegant and minimal UI
+* Rounded corners
+* Soft shadows
+* High-quality travel photography
+* Light theme
+* White background
+* Primary color: Milan-inspired deep blue (#0D47A1)
+* Secondary color: Gold (#D4AF37)
+* Mobile-first design
+* Suitable for .NET MAUI implementation
+
+Create the following screens:
+
+1. SPLASH SCREEN
+
+* Full-screen Milan city photo
+* App logo
+* App name: Milano City Guide
+* Elegant loading animation
+
+2. WELCOME SCREEN
+
+* Large Milan hero image
+* Short introduction text
+* "Sign In" button
+* "Create Account" button
+* Modern onboarding style
+
+3. LOGIN SCREEN
+
+* Email field
+* Password field
+* Remember me checkbox
+* Forgot password link
+* Sign In button
+* Social login buttons (Google and Apple)
+* Modern card layout
+
+4. REGISTER SCREEN
+
+* Full Name
+* Email
+* Password
+* Confirm Password
+* Terms and Conditions checkbox
+* Create Account button
+
+5. HOME SCREEN
+
+* Personalized greeting
+
+* Search bar
+
+* Featured Milan attractions carousel
+
+* Category cards:
+
+  * Food & Drinks
+  * Museums
+  * Culture & Art
+  * Transportation
+  * Routes
+  * Special Events
+
+* Popular places section
+
+* Recommended experiences section
+
+* Bottom navigation bar
+
+6. FOOD & DRINKS SCREEN
+
+* Restaurant list cards
+* Large food images
+* Rating
+* Price range
+* Location
+* Cuisine category filters
+* Detail button
+
+7. MUSEUMS SCREEN
+
+* Museum cards
+* Entrance fee
+* Opening hours
+* Short description
+* Large photo
+* Save to favorites button
+
+8. CULTURE & ART SCREEN
+
+* Concerts
+* Exhibitions
+* Opera events
+* Theaters
+* Event cards
+* Date information
+* Venue information
+
+9. TRANSPORTATION SCREEN
+
+* Milan Metro Guide
+* Tram Information
+* Bus Information
+* Airport Transfers
+* Transportation Cards
+* Visual route illustrations
+
+10. ROUTES SCREEN
+    Create ready-made travel itineraries:
+
+* 1 Day in Milan
+* 2 Days in Milan
+* Family Route
+* Museum Route
+* Shopping Route
+* Photography Route
+
+Display routes as beautiful timeline cards.
+
+11. SPECIAL EVENTS SCREEN
+
+* Milan Fashion Week
+* Christmas Markets
+* Easter Events
+* Summer Festivals
+* Sports Events
+* Seasonal recommendations
+
+12. FAVORITES SCREEN
+
+* Saved restaurants
+* Saved museums
+* Saved routes
+* Empty state design
+
+13. PROFILE SCREEN
+
+* User avatar
+* Name
+* Email
+* Statistics
+* Favorite places count
+* Planned routes count
+* Settings
+* Logout button
+
+14. PLACE DETAIL SCREEN
+    This screen should be reusable for attractions, museums, restaurants and events.
+
+Include:
+
+* Full-width hero image
+* Gallery
+* Title
+* Description
+* Location
+* Visiting information
+* Price information
+* Duration recommendation
+* Add to Favorites button
+* Share button
+* Open in Maps button
+
+Navigation:
+
+* Bottom navigation with icons
+* Home
+* Discover
+* Favorites
+* Profile
+
+Design Requirements:
+
+* Consistent design system
+* Beautiful typography
+* Travel-focused imagery
+* Smooth user experience
+* Modern premium look
+* Realistic mobile app screens
+* High-fidelity UI suitable for production
+* Create complete visual designs for all screens
+
+-----------------------------------------------------------------------------------------------------
+Mardin için
+
+Design a complete mobile travel guide application called "Mardin City Guide".
+
+The application is focused entirely on the city of Mardin, Turkey and should help tourists discover the city before and during their trip.
+
+Design style:
+
+* Modern and premium travel application
+* Inspired by Airbnb, Booking.com and Google Travel
+* Clean, elegant and minimal UI
+* Rounded corners
+* Soft shadows
+* High-quality travel photography (showcasing stone architecture, historic narrow streets, and the Mesopotamian plains)
+* Light theme
+* White background
+* Primary color: Mardin-inspired stone beige/sand color (#C5A880) or deep terracotta/sunset orange (#D35400)
+* Secondary color: Mesopotamian turquoise/deep blue (#008080)
+* Mobile-first design
+* Suitable for .NET MAUI implementation
+
+Create the following screens:
+
+1. SPLASH SCREEN
+
+* Full-screen Mardin old city photo (e.g., Ulu Cami minaret overlooking the Mesopotamian plains at sunset)
+* App logo (minimalist stone arch or silhouette icon)
+* App name: Mardin City Guide
+* Elegant loading animation
+
+2. WELCOME SCREEN
+
+* Large Mardin hero image
+* Short introduction text (e.g., "Step into a fairytale written in stone.")
+* "Sign In" button
+* "Create Account" button
+* Modern onboarding style
+
+3. LOGIN SCREEN
+
+* Email field
+* Password field
+* Remember me checkbox
+* Forgot password link
+* Sign In button
+* Social login buttons (Google and Apple)
+* Modern card layout
+
+4. REGISTER SCREEN
+
+* Full Name
+* Email
+* Password
+* Confirm Password
+* Terms and Conditions checkbox
+* Create Account button
+
+5. HOME SCREEN
+
+* Personalized greeting
+
+* Search bar
+
+* Featured Mardin attractions carousel (Deyrulzafaran, Zinciriye, Kasımiye, etc.)
+
+* Category cards:
+
+  * Gastronomy (Local Cuisine & Cafes)
+  * Monasteries & Mosques
+  * Culture & History
+  * Local Bazaars & Crafts
+  * Itineraries & Routes
+  * Seasonal Events
+
+* Popular places section
+
+* Recommended experiences section (e.g., Syrian wine tasting, stone carving workshops)
+
+* Bottom navigation bar
+
+6. GASTRONOMY (FOOD & DRINKS) SCREEN
+
+* Restaurant and traditional cafe list cards (featuring historical mansion settings)
+* Large food images (Mardin usulü içli köfte, kaburga dolması, Süryani çöreği, Harire)
+* Rating
+* Price range
+* Location (Old Mardin / New Mardin)
+* Cuisine category filters (Traditional Restaurants, Terraced Cafes, Local Wineries)
+* Detail button
+
+7. MONASTERIES & MOSQUES SCREEN
+
+* Historical religious sites cards
+* Entrance fee (if applicable)
+* Visiting hours
+* Short historical description
+* Large photo
+* Save to favorites button
+
+8. CULTURE & HISTORY SCREEN
+
+* Museums (Mardin Museum, Sakıp Sabancı Museum)
+* Madrasas (Zinciriye, Kasımiye)
+* Ancient cities (Dara Ancient City)
+* Cultural center events
+* Date and location information
+
+9. BAZAARS & LOCAL CRAFTS SCREEN
+
+* Historical Bazaars Guide (Kayseriye, Bakırcılar, Tellallar)
+* Local crafts information (Filigree/Telkari silver, Coppersmithing, Sabun-i/Mardin soaps)
+* Shop recommendations and locations
+* Visual shopping guides
+
+10. ROUTES SCREEN
+    Create ready-made travel itineraries:
+
+* 1 Day in Old Mardin (Walking Route)
+* 2 Days Mardin & Midyat
+* Dara & Surroundings Ancient Route
+* Gastronomy & Wine Route
+* Photography & Rooftop Route
+* Architectural Details Route
+
+Display routes as beautiful timeline cards.
+
+11. SPECIAL & SEASONAL EVENTS SCREEN
+
+* International Mardin Biennial
+* Cherry Festival (Midyat)
+* Harvester/Harvest Festivals
+* Concerts in Historic Mansions
+* Seasonal recommendations (Best sunset viewing times by month)
+
+12. FAVORITES SCREEN
+
+* Saved restaurants & cafes
+* Saved historical sites
+* Saved routes
+* Empty state design
+
+13. PROFILE SCREEN
+
+* User avatar
+* Name
+* Email
+* Statistics
+* Favorite places count
+* Planned routes count
+* Settings
+* Logout button
+
+14. PLACE DETAIL SCREEN
+    This screen should be reusable for attractions, museums, restaurants and events.
+
+Include:
+
+* Full-width hero image
+* Gallery
+* Title
+* Description
+* Location
+* Visiting information
+* Price information
+* Duration recommendation
+* Add to Favorites button
+* Share button
+* Open in Maps button
+
+Navigation:
+
+* Bottom navigation with icons
+* Home
+* Discover
+* Favorites
+* Profile
+
+Design Requirements:
+
+* Consistent design system
+* Beautiful typography
+* Travel-focused imagery
+* Smooth user experience
+* Modern premium look
+* Realistic mobile app screens
+* High-fidelity UI suitable for production
+* Create complete visual designs for all screens

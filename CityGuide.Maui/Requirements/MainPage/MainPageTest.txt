@@ -1,0 +1,48 @@
+﻿﻿<ScrollView>
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="15">
+
+        <Label
+            Text="Milano Şehir Rehberi"
+            FontSize="32"
+            FontAttributes="Bold"
+            TextColor="DarkBlue"
+            HorizontalOptions="Center" />
+
+        <Label
+            Text="İtalya'nın moda ve sanat başkenti Milano hakkında bilgiler."
+            FontSize="16"
+            HorizontalTextAlignment="Center"
+            TextColor="Gray" />
+
+        <Frame
+            BackgroundColor="#E3F2FD"
+            CornerRadius="15"
+            Padding="15">
+
+            <VerticalStackLayout>
+
+                <Label
+                    Text="Duomo Katedrali"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    TextColor="#0D47A1" />
+
+                <Label
+                    Text="Milano'nun en ünlü yapılarından biridir. Şehrin merkezinde yer alır ve her yıl milyonlarca turist tarafından ziyaret edilir."
+                    FontSize="15"
+                    TextColor="Black" />
+
+            </VerticalStackLayout>
+
+        </Frame>
+
+        <Button
+            Text="Detayları Gör"
+            BackgroundColor="#1976D2"
+            TextColor="White"
+            CornerRadius="12"/>
+
+    </VerticalStackLayout>
+</ScrollView>
