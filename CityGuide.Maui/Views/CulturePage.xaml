@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CulturePage"
+             Title="CulturePage"
+             BackgroundColor="#F8F9FA">
+
+    <!-- Üstte filtre çubuğu (Auto), altta etkinlik listesi (*) -->
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- ============ KATEGORİ FİLTRE ÇUBUĞU ============ -->
+        <CollectionView Grid.Row="0"
+                x:Name="CategoriesCollection"
+                ItemsLayout="HorizontalList"
+                SelectionMode="Single"
+                SelectionChanged="OnCategorySelectionChanged"
+                HeightRequest="60"
+                Margin="20,12">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <!-- Tek bir kategori hapı -->
+                    <Border StrokeThickness="1"
+        Padding="20,8"
+        Margin="0,0,8,0"
+        StrokeShape="RoundRectangle 20"
+        VerticalOptions="Center">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+
+                                <!-- Normal: gri zemin + gri metin -->
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#EDEEEF" />
+                                        <Setter Property="Stroke" Value="#C3C6D4" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                                <!-- Seçili: mavi zemin + beyaz metin -->
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                        <Setter Property="Stroke" Value="#0D47A1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Label Text="{Binding CategoryName}"
+           FontSize="14"
+           TextColor="#455A64"
+           VerticalOptions="Center" />
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- ============ ETKİNLİK LİSTESİ ============ -->
+        <CollectionView Grid.Row="1"
+                        x:Name="EventsCollection"
+                        Margin="20,0">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="4">
+
+                            <Border BackgroundColor="#FED65B"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="10,3"
+                                    HorizontalOptions="Start"
+                                    Margin="0,0,0,4">
+                                <Label Text="{Binding CategoryName}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#745C00" />
+                            </Border>
+
+                            <Label Text="{Binding DateText}"
+                                   FontSize="12"
+                                   TextColor="#455A64"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1" />
+
+                            <Label Text="{Binding Title}"
+                                   FontSize="20"
+                                   TextColor="#0D47A1"
+                                   FontAttributes="Bold" />
+
+                            <Label Text="{Binding Location}"
+                                   FontSize="14"
+                                   TextColor="#455A64" />
+
+                            <Button Text="Detaylar"
+                                    BackgroundColor="#0D47A1"
+                                    TextColor="#FFFFFF"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    HorizontalOptions="Start"
+                                    Padding="20,0"
+                                    Margin="0,8,0,0" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

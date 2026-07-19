@@ -1,0 +1,62 @@
+﻿﻿Anlaşıldı — seed verisini ben kodla basmak yerine, sen veriyi manuel ekleyeceksin. Bu durumda servisten tüm SeedAsync mantığını çıkarıyoruz. Servis sadece tabloları oluşturur ve okuma/yazma metotları sunar; içine veri basmaz.
+Ama burada bir karar var: "Manuel ekleme"yi nasıl yapacaksın? İki yol var ve servisin nasıl görüneceğini bu belirliyor:
+Yol A — SQLite Browser ile elle: Veritabanı dosyası oluştuktan sonra, onu SQLite Browser'da açıp satırları elle yazarsın. Bu durumda servise sadece okuma metotları yeter, yazma (Insert) metoduna bile gerek olmaz.
+Yol B — Uygulama içinden ekleme: İleride bir "ekle" ekranı/formu yapıp, kullanıcı (ya da sen) uygulama üzerinden kategori/etkinlik eklersin. Bu durumda servise AddCategoryAsync / AddEventAsync gibi yazma metotları gerekir.
+İkisini birden destekleyen, seed'siz temiz hali aşağıda. Hem okuma hem yazma metotlarını koydum ki Yol B'ye de hazır olsun (kullanmazsan zararı yok):
+csharpusing SQLite;
+using CityGuide.Maui.Models;
+
+namespace CityGuide.Maui.Services
+{
+    public class AppDatabase
+    {
+        private SQLiteAsyncConnection _database;
+
+        // Veritabanını hazırlar: bağlantıyı açar ve tabloları oluşturur.
+        // Bir kez kurulduktan sonra tekrar kurmaz.
+        private async Task InitAsync()
+        {
+            if (_database is not null)
+                return;
+
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "cityguide.db");
+
+            // Dosyanın tam yolunu görelim (SQLite Browser'da açmak için)
+            System.Diagnostics.Debug.WriteLine($"[DB PATH] {dbPath}");
+
+            _database = new SQLiteAsyncConnection(dbPath);
+
+            // Code-first: modellere bakıp tabloları oluştur (yoksa)
+            await _database.CreateTableAsync<Category>();
+            await _database.CreateTableAsync<Event>();
+        }
+
+        // --- Okuma metotları ---
+
+        public async Task<List<Category>> GetCategoriesAsync()
+        {
+            await InitAsync();
+            return await _database.Table<Category>().ToListAsync();
+        }
+
+        public async Task<List<Event>> GetEventsAsync()
+        {
+            await InitAsync();
+            return await _database.Table<Event>().ToListAsync();
+        }
+
+        // --- Yazma metotları (uygulama içinden eklemek istersen) ---
+
+        public async Task<int> AddCategoryAsync(Category category)
+        {
+            await InitAsync();
+            return await _database.InsertAsync(category);
+        }
+
+        public async Task<int> AddEventAsync(Event newEvent)
+        {
+            await InitAsync();
+            return await _database.InsertAsync(newEvent);
+        }
+
+----------------------------------------------------

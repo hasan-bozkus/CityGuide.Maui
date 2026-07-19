@@ -1,0 +1,517 @@
+﻿﻿-----------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CulturePage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,12"
+              ColumnSpacing="12"
+              BackgroundColor="#F8F9FA">
+
+            <Border Grid.Column="0"
+                    BackgroundColor="#0D47A1"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    VerticalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="20"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Kültür &amp; Sanat"
+                   FontFamily="HankenBold"
+                   FontSize="20"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="2"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="1"
+                    Stroke="#C3C6D4"
+                    StrokeShape="RoundRectangle 18"
+                    VerticalOptions="Center">
+                <Image Source="profile.png" Aspect="AspectFill" />
+            </Border>
+
+        </Grid>
+
+        <!-- ============ KATEGORİ FİLTRE ÇUBUĞU ============ -->
+        <CollectionView Grid.Row="1"
+                        x:Name="CategoriesCollection"
+                        SelectionMode="Single"
+                        SelectionChanged="OnCategorySelectionChanged"
+                        HeightRequest="52"
+                        Margin="20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{Binding BackgroundColor}"
+                            Stroke="{Binding BorderColor}"
+                            StrokeThickness="1"
+                            Padding="18,8"
+                            StrokeShape="RoundRectangle 22"
+                            VerticalOptions="Center">
+                        <Label Text="{Binding Name}"
+                               FontFamily="HankenBold"
+                               FontSize="14"
+                               TextColor="{Binding TextColor}"
+                               VerticalOptions="Center" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ETKİNLİK LİSTESİ ============ -->
+        <CollectionView Grid.Row="2"
+                        x:Name="EventsCollection"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="4">
+
+                            <Border BackgroundColor="{Binding BadgeColor}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 10"
+                                    Padding="10,3"
+                                    HorizontalOptions="Start"
+                                    Margin="0,0,0,4">
+                                <Label Text="{Binding CategoryName}"
+                                       FontFamily="Inter"
+                                       FontSize="12"
+                                       TextColor="{Binding BadgeTextColor}" />
+                            </Border>
+
+                            <Label Text="{Binding DateText}"
+                                   FontFamily="Inter"
+                                   FontSize="12"
+                                   TextColor="#455A64"
+                                   CharacterSpacing="1" />
+
+                            <Label Text="{Binding Title}"
+                                   FontFamily="HankenBold"
+                                   FontSize="20"
+                                   TextColor="#0D47A1" />
+
+                            <Label Text="{Binding Location}"
+                                   FontFamily="HankenRegular"
+                                   FontSize="14"
+                                   TextColor="#455A64" />
+
+                            <Button Text="Detaylar"
+                                    Clicked="OnDetailsClicked"
+                                    BackgroundColor="#0D47A1"
+                                    TextColor="#FFFFFF"
+                                    FontFamily="HankenBold"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    HorizontalOptions="Start"
+                                    Padding="20,0"
+                                    Margin="0,8,0,0" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, *, *, *"
+              BackgroundColor="#FFFFFF"
+              Padding="0,8"
+              HeightRequest="64">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe88a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Ana Sayfa" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe87a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Keşfet" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEventsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe878;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Etkinlikler" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe7fd;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Profil" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
+
+-----------------------------------------------------------------------------------
+
+[Ignore]
+public bool IsSelected { get; set; }
+
+[Ignore]
+public Color BackgroundColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#FFFFFF");
+
+[Ignore]
+public Color BorderColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#C3C6D4");
+
+[Ignore]
+public Color TextColor => IsSelected ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#191C1D");
+
+
+-----------------------------------------------------------------------------------
+
+[Ignore]
+public Color BadgeColor => CategoryName switch
+{
+    "Konserler" => Color.FromArgb("#E1BEE7"),
+    "Tiyatro" => Color.FromArgb("#FFDBCD"),
+    "Sergi" => Color.FromArgb("#D9E2FF"),
+    "Futbol Maçı" => Color.FromArgb("#C8E6C9"),
+    _ => Color.FromArgb("#EDEEEF")
+};
+
+[Ignore]
+public Color BadgeTextColor => CategoryName switch
+{
+    "Konserler" => Color.FromArgb("#4A148C"),
+    "Tiyatro" => Color.FromArgb("#7D2D00"),
+    "Sergi" => Color.FromArgb("#0D47A1"),
+    "Futbol Maçı" => Color.FromArgb("#1B5E20"),
+    _ => Color.FromArgb("#455A64")
+};
+
+
+-----------------------------------------------------------------------------------
+
+private readonly AppDatabase _db = new AppDatabase();
+    private List<Event> _allEvents = new List<Event>();
+    private List<Category> _allCategories = new List<Category>();
+
+    public CulturePage()
+    {
+        InitializeComponent();
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // --- Kategoriler ---
+        var categories = await _db.GetCategoriesAsync();
+        categories.Insert(0, new Category { Id = 0, CategoryName = "Tümü" });
+        _allCategories = categories;
+        _allCategories[0].IsSelected = true;
+
+        CategoriesCollection.ItemsSource = _allCategories;
+
+        // --- Etkinlikler ---
+        _allEvents = await _db.GetEventsWithCategoryAsync();
+        EventsCollection.ItemsSource = _allEvents;
+
+        CategoriesCollection.SelectedItem = _allCategories[0];
+    }
+
+    private void OnCategorySelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not Category category)
+            return;
+
+        // Tüm kategorilerin seçim durumunu güncelle
+        foreach (var cat in _allCategories)
+        {
+            cat.IsSelected = (cat == category);
+        }
+
+        // Listeyi yeniden ata ki renkler tazelensin
+        CategoriesCollection.ItemsSource = null;
+        CategoriesCollection.ItemsSource = _allCategories;
+        CategoriesCollection.SelectedItem = category;
+
+        // Etkinlikleri filtrele
+        if (category.Id == 0)
+        {
+            EventsCollection.ItemsSource = _allEvents;
+        }
+        else
+        {
+            EventsCollection.ItemsSource = _allEvents
+                .Where(ev => ev.CategoryId == category.Id)
+                .ToList();
+        }
+    }
+
+    private async void OnDetailsClicked(object sender, EventArgs e)
+    {
+        // Şimdilik hiçbir şey yapmıyor (senin isteğinle)
+    }
+
+    private async void OnHomeTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//home");
+    }
+
+    private async void OnDiscoverTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//discover");
+    }
+
+    private async void OnEventsTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//events");
+    }
+
+    private async void OnProfileTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("profile");
+    }
+
+
+-----------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CulturePage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,12"
+              ColumnSpacing="12"
+              BackgroundColor="#F8F9FA">
+
+            <Border Grid.Column="0"
+                    BackgroundColor="#0D47A1"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    VerticalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="20"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Kültür &amp; Sanat"
+                   FontFamily="HankenBold"
+                   FontSize="20"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="2"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="1"
+                    Stroke="#C3C6D4"
+                    StrokeShape="RoundRectangle 18"
+                    VerticalOptions="Center">
+                <Image Source="profile.png" Aspect="AspectFill" />
+            </Border>
+
+        </Grid>
+
+        <!-- ============ KATEGORİ FİLTRE ÇUBUĞU ============ -->
+        <CollectionView Grid.Row="1"
+                        x:Name="CategoriesCollection"
+                        SelectionMode="Single"
+                        SelectionChanged="OnCategorySelectionChanged"
+                        HeightRequest="52"
+                        Margin="20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{Binding BackgroundColor}"
+                            Stroke="{Binding BorderColor}"
+                            StrokeThickness="1"
+                            Padding="18,8"
+                            StrokeShape="RoundRectangle 22"
+                            VerticalOptions="Center">
+                        <Label Text="{Binding CategoryName}"
+                               FontFamily="HankenBold"
+                               FontSize="14"
+                               TextColor="{Binding TextColor}"
+                               VerticalOptions="Center" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ETKİNLİK LİSTESİ ============ -->
+        <CollectionView Grid.Row="2"
+                        x:Name="EventsCollection"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <!-- Etkinlik görseli -->
+                            <Border StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12,12,0,0"
+                                    HeightRequest="160">
+                                <Image Source="{Binding ImageName}" Aspect="AspectFill" />
+                            </Border>
+
+                            <!-- İçerik -->
+                            <VerticalStackLayout Padding="16" Spacing="4">
+
+                                <Border BackgroundColor="{Binding BadgeColor}"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="10,3"
+                                        HorizontalOptions="Start"
+                                        Margin="0,0,0,4">
+                                    <Label Text="{Binding CategoryName}"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           TextColor="{Binding BadgeTextColor}" />
+                                </Border>
+
+                                <Label Text="{Binding DateText}"
+                                       FontFamily="Inter"
+                                       FontSize="12"
+                                       TextColor="#455A64"
+                                       CharacterSpacing="1" />
+
+                                <Label Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1" />
+
+                                <Label Text="{Binding Location}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#455A64" />
+
+                                <Button Text="Detaylar"
+                                        Clicked="OnDetailsClicked"
+                                        BackgroundColor="#0D47A1"
+                                        TextColor="#FFFFFF"
+                                        FontFamily="HankenBold"
+                                        FontSize="14"
+                                        HeightRequest="40"
+                                        CornerRadius="8"
+                                        HorizontalOptions="Start"
+                                        Padding="20,0"
+                                        Margin="0,8,0,0" />
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, *, *, *"
+              BackgroundColor="#FFFFFF"
+              Padding="0,8"
+              HeightRequest="64">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe88a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Ana Sayfa" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe87a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Keşfet" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEventsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe878;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Etkinlikler" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe7fd;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Profil" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------

@@ -1,0 +1,533 @@
+﻿﻿ <VerticalStackLayout Padding="20" Spacing="12" VerticalOptions="Center">
+        <Label x:Name="StatusLabel"
+               Text="Veritabanı kontrol ediliyor..."
+               FontSize="16"
+               HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+---------------------------------------------------------------------------
+
+// Sayfa ekrana geldiğinde çalışır
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Servisi çağır -> InitAsync tetiklenir -> tablolar oluşur
+        var categories = await _db.GetCategoriesAsync();
+        var events = await _db.GetEventsAsync();
+
+        StatusLabel.Text =
+            $"{categories.Count} kategori, {events.Count} etkinlik bulundu.";
+    }
+
+---------------------------------------------------------------------------
+
+2. Etkinlik — Tiyatro
+
+Title: Venedik Taciri
+CategoryId: 2  (Tiyatro)
+DateText: 15 Kas - 22 Kas
+Location: Piccolo Teatro • Strehler Salonu
+ImageName: event_tiyatro.jpg
+Rating: 4.6
+
+3. Etkinlik — Sergi
+
+Title: Gerçeküstücülük ve Modernite
+CategoryId: 3  (Sergi)
+DateText: 12 Eki - 30 Ara 2024
+Location: Pinacoteca di Brera • Salon VIII
+ImageName: event_sergi.jpg
+Rating: 4.8
+
+4. Etkinlik — Futbol Maçı
+
+Title: Derbi: Inter - Milan
+CategoryId: 4  (Futbol Maçı)
+DateText: 3 Kas, 20:45
+Location: San Siro Stadyumu • Milano
+ImageName: event_derbi.jpg
+Rating: 0
+
+---------------------------------------------------------------------------
+
+5. Etkinlik — Konser (2.)
+
+Title: Blue Note Caz Geceleri
+CategoryId: 1  (Konserler)
+DateText: Yarın, 21:30
+Location: Blue Note Milano • Isola Bölgesi
+ImageName: event_jazz.jpg
+Rating: 4.7
+
+---------------------------------------------------------------------------
+
+  <CollectionView x:Name="EventsCollection">
+
+        <!-- Her bir öğenin nasıl görüneceği: DataTemplate -->
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+
+                <!-- Bir etkinliğin tek satırlık görünümü -->
+                <Label Text="{Binding Title}"
+                       FontSize="18"
+                       Padding="20,12" />
+
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+
+    </CollectionView>
+
+---------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CulturePage"
+             Title="CulturePage"
+             BackgroundColor="#F8F9FA">
+
+    <CollectionView x:Name="EventsCollection"
+                    Margin="20,12">
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+
+                <!-- Tek bir etkinlik kartı -->
+                <Border BackgroundColor="#FFFFFF"
+                        Stroke="#C3C6D4"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Margin="0,0,0,16"
+                        StrokeShape="RoundRectangle 12">
+
+                    <VerticalStackLayout Spacing="4">
+
+                        <!-- Tarih: label-sm -->
+                        <Label Text="{Binding DateText}"
+                               FontSize="12"
+                               TextColor="#455A64"
+                               FontAttributes="Bold"
+                               CharacterSpacing="1" />
+
+                        <!-- Başlık: headline-md -->
+                        <Label Text="{Binding Title}"
+                               FontSize="20"
+                               TextColor="#0D47A1"
+                               FontAttributes="Bold" />
+
+                        <!-- Konum: label-md -->
+                        <Label Text="{Binding Location}"
+                               FontSize="14"
+                               TextColor="#455A64" />
+
+                        <!-- Buton -->
+                        <Button Text="Detaylar"
+                                BackgroundColor="#0D47A1"
+                                TextColor="#FFFFFF"
+                                FontSize="14"
+                                HeightRequest="40"
+                                CornerRadius="8"
+                                HorizontalOptions="Start"
+                                Padding="20,0"
+                                Margin="0,8,0,0" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+
+    </CollectionView>
+
+</ContentPage>
+
+---------------------------------------------------------------------------
+
+// Etkinlikleri çeker VE her birinin kategori adını doldurur (foreign key eşleştirme)
+public async Task<List<Event>> GetEventsWithCategoryAsync()
+{
+    await InitAsync();
+
+    // İki tabloyu da çek
+    var events = await _database.Table<Event>().ToListAsync();
+    var categories = await _database.Table<Category>().ToListAsync();
+
+    // Her etkinlik için, CategoryId'sine uyan kategoriyi bul ve adını yaz
+    foreach (var ev in events)
+    {
+        var matchingCategory = categories.FirstOrDefault(c => c.Id == ev.CategoryId);
+        if (matchingCategory is not null)
+        {
+            ev.CategoryName = matchingCategory.CategoryName;
+        }
+        else
+        {
+            ev.CategoryName = "Bilinmeyen";
+        }
+    }
+
+    return events;
+}
+
+---------------------------------------------------------------------------
+
+<!-- Kategori rozeti -->
+<Border BackgroundColor="#FED65B"
+        StrokeThickness="0"
+        StrokeShape="RoundRectangle 12"
+        Padding="10,3"
+        HorizontalOptions="Start"
+        Margin="0,0,0,4">
+    <Label Text="{Binding CategoryName}"
+           FontSize="12"
+           FontAttributes="Bold"
+           TextColor="#745C00" />
+</Border>
+
+---------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CulturePage"
+             Title="CulturePage"
+             BackgroundColor="#F8F9FA">
+
+    <!-- Üstte filtre çubuğu (Auto), altta etkinlik listesi (*) -->
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- ============ KATEGORİ FİLTRE ÇUBUĞU ============ -->
+        <CollectionView Grid.Row="0"
+                        x:Name="CategoriesCollection"
+                        ItemsLayout="HorizontalList"
+                        HeightRequest="60"
+                        Margin="20,12">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <!-- Tek bir kategori hapı -->
+                    <Border BackgroundColor="#EDEEEF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="20,8"
+                            Margin="0,0,8,0"
+                            StrokeShape="RoundRectangle 20"
+                            VerticalOptions="Center">
+                        <Label Text="{Binding CategoryName}"
+                               FontSize="14"
+                               TextColor="#455A64"
+                               VerticalOptions="Center" />
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- ============ ETKİNLİK LİSTESİ ============ -->
+        <CollectionView Grid.Row="1"
+                        x:Name="EventsCollection"
+                        Margin="20,0">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="4">
+
+                            <Border BackgroundColor="#FED65B"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="10,3"
+                                    HorizontalOptions="Start"
+                                    Margin="0,0,0,4">
+                                <Label Text="{Binding CategoryName}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#745C00" />
+                            </Border>
+
+                            <Label Text="{Binding DateText}"
+                                   FontSize="12"
+                                   TextColor="#455A64"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="1" />
+
+                            <Label Text="{Binding Title}"
+                                   FontSize="20"
+                                   TextColor="#0D47A1"
+                                   FontAttributes="Bold" />
+
+                            <Label Text="{Binding Location}"
+                                   FontSize="14"
+                                   TextColor="#455A64" />
+
+                            <Button Text="Detaylar"
+                                    BackgroundColor="#0D47A1"
+                                    TextColor="#FFFFFF"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    HorizontalOptions="Start"
+                                    Padding="20,0"
+                                    Margin="0,8,0,0" />
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+---------------------------------------------------------------------------
+
+ var categories = await _db.GetCategoriesAsync();
+
+        // Listenin başına "Tümü" ekle (veritabanında yok, sadece arayüz için)
+        categories.Insert(0, new Category { Id = 0, CategoryName = "Tümü" });
+
+        CategoriesCollection.ItemsSource = categories;
+
+        // --- Etkinlikler ---
+        var events = await _db.GetEventsWithCategoryAsync();
+        EventsCollection.ItemsSource = events;
+
+
+---------------------------------------------------------------------------
+
+  // --- Kategoriler ---
+        var categories = await _db.GetCategoriesAsync();
+        categories.Insert(0, new Category { Id = 0, CategoryName = "Tümü" });
+        CategoriesCollection.ItemsSource = categories;
+
+        // --- Etkinlikler: bir kez çek, bellekte sakla ---
+        _allEvents = await _db.GetEventsWithCategoryAsync();
+
+        // Başlangıçta hepsini göster
+        EventsCollection.ItemsSource = _allEvents;
+
+
+---------------------------------------------------------------------------
+
+  // Bir kategori hapına tıklanınca çalışır
+    private void OnCategoryTapped(object sender, TappedEventArgs e)
+    {
+        // Tıklanan hapın bağlı olduğu kategori nesnesini al
+        if (sender is not Border border) return;
+        if (border.BindingContext is not Category category) return;
+
+        if (category.Id == 0)
+        {
+            // "Tümü" -> hepsini göster
+            EventsCollection.ItemsSource = _allEvents;
+        }
+        else
+        {
+            // Seçilen kategoriye ait etkinlikleri süz
+            var filtered = _allEvents
+                .Where(ev => ev.CategoryId == category.Id)
+                .ToList();
+
+            EventsCollection.ItemsSource = filtered;
+        }
+
+
+---------------------------------------------------------------------------
+
+<!-- Tek bir kategori hapı -->
+<Border BackgroundColor="#EDEEEF"
+        Stroke="#C3C6D4"
+        StrokeThickness="1"
+        Padding="20,8"
+        Margin="0,0,8,0"
+        StrokeShape="RoundRectangle 20"
+        VerticalOptions="Center">
+
+    <!-- Tıklama olayı -->
+    <Border.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnCategoryTapped" />
+    </Border.GestureRecognizers>
+
+    <Label Text="{Binding CategoryName}"
+           FontSize="14"
+           TextColor="#455A64"
+           VerticalOptions="Center" />
+</Border>
+
+
+---------------------------------------------------------------------------
+
+<!-- ============ KATEGORİ FİLTRE ÇUBUĞU ============ -->
+<CollectionView Grid.Row="0"
+                x:Name="CategoriesCollection"
+                ItemsLayout="HorizontalList"
+                SelectionMode="Single"
+                SelectionChanged="OnCategorySelectionChanged"
+                HeightRequest="60"
+                Margin="20,12">
+
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+
+            <!-- Tek bir kategori hapı -->
+            <Border StrokeThickness="1"
+                    Padding="20,8"
+                    Margin="0,0,8,0"
+                    StrokeShape="RoundRectangle 20"
+                    VerticalOptions="Center">
+
+                <!-- Seçili / normal görünüm -->
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+
+                        <!-- Normal (seçili değil): gri zemin, çerçeveli -->
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#EDEEEF" />
+                                <Setter Property="Stroke" Value="#C3C6D4" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <!-- Seçili: dolu mavi, çerçevesiz -->
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                <Setter Property="Stroke" Value="#0D47A1" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <Label Text="{Binding CategoryName}"
+                       FontSize="14"
+                       TextColor="#455A64"
+                       VerticalOptions="Center" />
+            </Border>
+
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+
+</CollectionView>
+
+---------------------------------------------------------------------------
+
+ // --- Kategoriler ---
+        var categories = await _db.GetCategoriesAsync();
+        categories.Insert(0, new Category { Id = 0, CategoryName = "Tümü" });
+        CategoriesCollection.ItemsSource = categories;
+
+        // --- Etkinlikler: bir kez çek, bellekte sakla ---
+        _allEvents = await _db.GetEventsWithCategoryAsync();
+        EventsCollection.ItemsSource = _allEvents;
+
+        // Başlangıçta "Tümü" seçili olsun (listenin ilk öğesi)
+        CategoriesCollection.SelectedItem = categories[0];
+
+---------------------------------------------------------------------------
+
+// Bir kategori seçilince çalışır
+    private void OnCategorySelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Seçili öğeyi al
+        if (e.CurrentSelection.FirstOrDefault() is not Category category)
+            return;
+
+        if (category.Id == 0)
+        {
+            // "Tümü" -> hepsini göster
+            EventsCollection.ItemsSource = _allEvents;
+        }
+        else
+        {
+            // Seçilen kategoriye ait etkinlikleri süz
+            var filtered = _allEvents
+                .Where(ev => ev.CategoryId == category.Id)
+                .ToList();
+
+            EventsCollection.ItemsSource = filtered;
+        }
+    }
+
+---------------------------------------------------------------------------
+
+<Label Text="{Binding CategoryName}"
+       FontSize="14"
+       VerticalOptions="Center">
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+
+            <!-- Normal: gri metin -->
+            <VisualState x:Name="Normal">
+                <VisualState.Setters>
+                    <Setter Property="TextColor" Value="#455A64" />
+                </VisualState.Setters>
+            </VisualState>
+
+            <!-- Seçili: beyaz metin -->
+            <VisualState x:Name="Selected">
+                <VisualState.Setters>
+                    <Setter Property="TextColor" Value="#FFFFFF" />
+                </VisualState.Setters>
+            </VisualState>
+
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+</Label>
+
+
+---------------------------------------------------------------------------
+
+<!-- Tek bir kategori hapı -->
+<Border StrokeThickness="1"
+        Padding="20,8"
+        Margin="0,0,8,0"
+        StrokeShape="RoundRectangle 20"
+        VerticalOptions="Center">
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+
+            <!-- Normal: gri zemin + gri metin -->
+            <VisualState x:Name="Normal">
+                <VisualState.Setters>
+                    <Setter Property="BackgroundColor" Value="#EDEEEF" />
+                    <Setter Property="Stroke" Value="#C3C6D4" />
+                </VisualState.Setters>
+            </VisualState>
+
+            <!-- Seçili: mavi zemin + beyaz metin -->
+            <VisualState x:Name="Selected">
+                <VisualState.Setters>
+                    <Setter Property="BackgroundColor" Value="#0D47A1" />
+                    <Setter Property="Stroke" Value="#0D47A1" />
+                </VisualState.Setters>
+            </VisualState>
+
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Label Text="{Binding CategoryName}"
+           FontSize="14"
+           TextColor="#455A64"
+           VerticalOptions="Center" />
+</Border>
+
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
