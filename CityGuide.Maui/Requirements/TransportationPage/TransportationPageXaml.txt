@@ -1,0 +1,610 @@
+﻿﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.TransportationPage"
+             Title="TransportationPage">
+
+    <!-- ANA GRID: 3 satır.
+         0 (Auto) = Üst App Bar   -> sabit
+         1 (*)    = ScrollView    -> kayar
+         2 (Auto) = Alt Nav Bar   -> sabit -->
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <BoxView Grid.Row="0"
+                 HeightRequest="64"
+                 Color="#0D47A1" />
+        <!-- Milan mavisi -->
+
+        <!-- ============ KAYAN İÇERİK ============ -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- HERO / BAŞLIK -->
+                <BoxView HeightRequest="160" Color="#D4AF37" />
+
+                <!-- BENTO GRID -->
+                <BoxView HeightRequest="220" Color="#00796B" />
+
+                <!-- METRO HATLARI -->
+                <BoxView HeightRequest="300" Color="#455A64" />
+
+                <!-- TRAMS & SURFACE -->
+                <BoxView HeightRequest="240" Color="#735C00" />
+
+                <!-- AIRPORT TRANSFERS -->
+                <BoxView HeightRequest="320" Color="#602100" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <BoxView Grid.Row="2"
+                 HeightRequest="64"
+                 Color="#FED65B" />
+        <!-- Sarı -->
+
+    </Grid>
+
+</ContentPage>
+
+------------------------------------------------------------------------------------
+<!-- ============ ÜST APP BAR ============ -->
+<Grid Grid.Row="0"
+      HeightRequest="64"
+      ColumnDefinitions="Auto, *, Auto"
+      Padding="20,0"
+      ColumnSpacing="12"
+      BackgroundColor="#F8F9FA">
+
+    <!-- Menü (hamburger) ikonu -->
+    <Label Grid.Column="0"
+           Text="☰"
+           FontSize="26"
+           TextColor="#0D47A1"
+           VerticalOptions="Center" />
+
+    <!-- Başlık -->
+    <Label Grid.Column="1"
+           Text="Milano City Guide"
+           TextColor="#0D47A1"
+           FontSize="20"
+           FontAttributes="Bold"
+           VerticalOptions="Center" />
+
+    <!-- Profil buraya gelecek (Adım 2) -->
+
+</Grid>
+
+------------------------------------------------------------------------------------
+
+<!-- Dairesel profil fotoğrafı -->
+<Border Grid.Column="2"
+        WidthRequest="36"
+        HeightRequest="36"
+        StrokeThickness="1"
+        Stroke="#C3C6D4"
+        StrokeShape="RoundRectangle 18"
+        VerticalOptions="Center"
+        IsClippedToBounds="True">
+
+    <Image Source="profile.jpg"
+           Aspect="AspectFill" />
+
+</Border>
+
+------------------------------------------------------------------------------------
+
+<!-- ============ HERO / BAŞLIK ============ -->
+<VerticalStackLayout Padding="20,24,20,0" Spacing="4">
+
+    <!-- Üst etiket: label-sm, büyük harf, geniş harf aralığı -->
+    <Label Text="GETTING AROUND"
+           TextColor="#455A64"
+           FontSize="12"
+           FontAttributes="Bold"
+           CharacterSpacing="2" />
+
+    <!-- Büyük başlık: display 40/700 -->
+    <Label Text="Transportation"
+           TextColor="#0D47A1"
+           FontSize="40"
+           FontAttributes="Bold" />
+
+    <!-- Açıklama: body-lg 18/400 -->
+    <Label Text="Milano'da bir yerli hassasiyetiyle yol alın. Tarihi tramvaylardan yüksek hızlı metro hatlarına kadar, şehri keşfetmenin en verimli yollarını öğrenin."
+           TextColor="#434652"
+           FontSize="18"
+           Margin="0,8,0,0" />
+
+</VerticalStackLayout>
+
+------------------------------------------------------------------------------------
+
+<!-- ============ ALT NAV BAR ============ -->
+<Grid Grid.Row="2"
+      ColumnDefinitions="*, *, *, *"
+      Padding="0,8"
+      BackgroundColor="#F8F9FA">
+
+    <!-- Home -->
+    <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center">
+        <Label Text="🏠" FontSize="22" HorizontalOptions="Center" />
+        <Label Text="Ana Sayfa" FontSize="12" TextColor="#455A64" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+    <!-- Discover -->
+    <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+        <Label Text="🧭" FontSize="22" HorizontalOptions="Center" />
+        <Label Text="Keşfet" FontSize="12" TextColor="#455A64" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+    <!-- Favorites -->
+    <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center">
+        <Label Text="❤️" FontSize="22" HorizontalOptions="Center" />
+        <Label Text="Favoriler" FontSize="12" TextColor="#455A64" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+    <!-- Profile -->
+    <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center">
+        <Label Text="👤" FontSize="22" HorizontalOptions="Center" />
+        <Label Text="Profil" FontSize="12" TextColor="#455A64" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+</Grid>
+
+------------------------------------------------------------------------------------
+
+<!-- Discover (vurgulu) -->
+<Border Grid.Column="1"
+        BackgroundColor="#FED65B"
+        StrokeThickness="0"
+        StrokeShape="RoundRectangle 20"
+        Padding="16,4"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
+    <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+        <Label Text="🧭" FontSize="22" HorizontalOptions="Center" />
+        <Label Text="Keşfet" FontSize="12" TextColor="#745C00" HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</Border>
+
+------------------------------------------------------------------------------------
+
+<!-- ============ METRO HATLARI ============ -->
+<VerticalStackLayout Padding="20,24,20,0" Spacing="16">
+
+    <!-- Başlık satırı: solda başlık, sağda link -->
+    <Grid ColumnDefinitions="*, Auto">
+
+        <!-- headline-md 24/600 -->
+        <Label Grid.Column="0"
+               Text="Metro Hatları"
+               TextColor="#0D47A1"
+               FontSize="24"
+               FontAttributes="Bold"
+               VerticalOptions="Center" />
+
+        <!-- Sağ link: label-md 14/500 -->
+        <Label Grid.Column="1"
+               Text="Durum Bilgisi ›"
+               TextColor="#0D47A1"
+               FontSize="14"
+               VerticalOptions="Center" />
+
+    </Grid>
+
+</VerticalStackLayout>
+
+------------------------------------------------------------------------------------
+
+<!-- M1 kartı -->
+<Grid ColumnDefinitions="Auto, *">
+
+    <!-- Sol renkli şerit (hat rengi) -->
+    <BoxView Grid.Column="0"
+             WidthRequest="6"
+             Color="#E31E24" />
+
+    <!-- Kart gövdesi -->
+    <Border Grid.Column="1"
+            BackgroundColor="#FFFFFF"
+            Stroke="#C3C6D4"
+            StrokeThickness="1"
+            Padding="16"
+            StrokeShape="RoundRectangle 0,8,0,8">
+
+        <VerticalStackLayout Spacing="8">
+
+            <!-- Hat kodu + adı -->
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M1" FontSize="18" FontAttributes="Bold" TextColor="#E31E24" />
+                <Label Text="KIRMIZI HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <!-- Güzergah -->
+            <Label Text="Sesto F.S. — Rho Fiera" FontSize="14" TextColor="#191C1D" />
+
+            <!-- Durum: yeşil nokta + metin -->
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Border>
+
+</Grid>
+
+------------------------------------------------------------------------------------
+
+<!-- M1 -->
+<Grid ColumnDefinitions="Auto, *">
+    <BoxView Grid.Column="0" WidthRequest="6" Color="#E31E24" />
+    <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#C3C6D4" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 0,8,0,8">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M1" FontSize="18" FontAttributes="Bold" TextColor="#E31E24" />
+                <Label Text="KIRMIZI HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Label Text="Sesto F.S. — Rho Fiera" FontSize="14" TextColor="#191C1D" />
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</Grid>
+
+<!-- M2 -->
+<Grid ColumnDefinitions="Auto, *">
+    <BoxView Grid.Column="0" WidthRequest="6" Color="#009246" />
+    <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#C3C6D4" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 0,8,0,8">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M2" FontSize="18" FontAttributes="Bold" TextColor="#009246" />
+                <Label Text="YEŞİL HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Label Text="Assago/Abbiat. — Gessate" FontSize="14" TextColor="#191C1D" />
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</Grid>
+
+<!-- M3 -->
+<Grid ColumnDefinitions="Auto, *">
+    <BoxView Grid.Column="0" WidthRequest="6" Color="#FECB00" />
+    <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#C3C6D4" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 0,8,0,8">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M3" FontSize="18" FontAttributes="Bold" TextColor="#FECB00" />
+                <Label Text="SARI HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Label Text="San Donato — Comasina" FontSize="14" TextColor="#191C1D" />
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</Grid>
+
+<!-- M4 -->
+<Grid ColumnDefinitions="Auto, *">
+    <BoxView Grid.Column="0" WidthRequest="6" Color="#0054A6" />
+    <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#C3C6D4" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 0,8,0,8">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M4" FontSize="18" FontAttributes="Bold" TextColor="#0054A6" />
+                <Label Text="MAVİ HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Label Text="Linate Aeroporto — San Babila" FontSize="14" TextColor="#191C1D" />
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</Grid>
+
+<!-- M5 -->
+<Grid ColumnDefinitions="Auto, *">
+    <BoxView Grid.Column="0" WidthRequest="6" Color="#B26AB1" />
+    <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#C3C6D4" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 0,8,0,8">
+        <VerticalStackLayout Spacing="8">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="M5" FontSize="18" FontAttributes="Bold" TextColor="#B26AB1" />
+                <Label Text="LEYLAK HAT" FontSize="12" FontAttributes="Bold" TextColor="#455A64" CharacterSpacing="1" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Label Text="Bignami — San Siro Stadio" FontSize="14" TextColor="#191C1D" />
+            <HorizontalStackLayout Spacing="6">
+                <Ellipse Fill="#00796B" WidthRequest="8" HeightRequest="8" VerticalOptions="Center" />
+                <Label Text="Normal Servis" FontSize="12" TextColor="#434652" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</Grid>
+
+-----------------------------------------------------------------------------------
+
+<!-- ============ TRAMVAY & YÜZEY ============ -->
+<VerticalStackLayout Padding="20,24,20,0" Spacing="16">
+
+    <!-- Bölüm başlığı: headline-md 24/600 -->
+    <Label Text="Tramvay & Yüzey"
+           TextColor="#0D47A1"
+           FontSize="24"
+           FontAttributes="Bold" />
+
+    <!-- Kart 1: Tarihi Tramvay -->
+    <Border BackgroundColor="#FFFFFF"
+            Stroke="#C3C6D4"
+            StrokeThickness="1"
+            Padding="16"
+            StrokeShape="RoundRectangle 12">
+
+        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+
+            <!-- Sol: ikon kutusu (sabit kare) -->
+            <Border Grid.Column="0"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    BackgroundColor="#EDEEEF"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 8"
+                    VerticalOptions="Start">
+                <Label Text="🚊"
+                       FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <!-- Sağ: metin bloğu -->
+            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                <Label Text="Tarihi Tramvay Hattı 1"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#191C1D" />
+                <Label Text="Piazza della Scala ve Barış Takı'ndan geçen en manzaralı güzergah."
+                       FontSize="16"
+                       TextColor="#434652" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Border>
+
+</VerticalStackLayout>
+
+------------------------------------------------------------------------------------
+
+<!-- Kart 2: Trolleybus -->
+<Border BackgroundColor="#FFFFFF"
+        Stroke="#C3C6D4"
+        StrokeThickness="1"
+        Padding="16"
+        StrokeShape="RoundRectangle 12">
+
+    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+
+        <Border Grid.Column="0"
+                WidthRequest="48"
+                HeightRequest="48"
+                BackgroundColor="#EDEEEF"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start">
+            <Label Text="🚌"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Border>
+
+        <VerticalStackLayout Grid.Column="1" Spacing="4">
+            <Label Text="90/91 Troleybüs Hattı"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#191C1D" />
+            <Label Text="Şehrin dış çemberini birbirine bağlayan 24 saat hizmet."
+                   FontSize="16"
+                   TextColor="#434652" />
+        </VerticalStackLayout>
+
+    </Grid>
+
+</Border>
+
+------------------------------------------------------------------------------------
+
+<!-- ============ HAVAALANI TRANSFERLERİ ============ -->
+<VerticalStackLayout Padding="20,24,20,24" Spacing="16">
+
+    <!-- Bölüm başlığı -->
+    <Label Text="Havaalanı Transferleri"
+           TextColor="#0D47A1"
+           FontSize="24"
+           FontAttributes="Bold" />
+
+    <!-- Kart -->
+    <Border BackgroundColor="#FFFFFF"
+            Stroke="#C3C6D4"
+            StrokeThickness="1"
+            Padding="0"
+            StrokeShape="RoundRectangle 12">
+
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Üst görsel bandı (katmanlı) -->
+            <Grid HeightRequest="128">
+
+                <!-- Katman 1: görsel (şimdilik düz renk) -->
+                <BoxView Color="#0D47A1" />
+
+                <!-- Katman 2: alttan koyu gradient -->
+                <Border StrokeThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#00000000" Offset="0.0" />
+                            <GradientStop Color="#99000000" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+
+                <!-- Katman 3: overlay metin (alt-sol) -->
+                <Label Text="Malpensa Express"
+                       TextColor="#FFFFFF"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       VerticalOptions="End"
+                       HorizontalOptions="Start"
+                       Margin="16" />
+
+            </Grid>
+
+        </VerticalStackLayout>
+
+    </Border>
+
+
+
+</VerticalStackLayout>
+
+------------------------------------------------------------------------------------
+
+<!-- Alt bilgi bölümü -->
+<VerticalStackLayout Padding="16" Spacing="8">
+
+    <!-- Terminal + fiyat -->
+    <Grid ColumnDefinitions="*, Auto">
+        <Label Grid.Column="0"
+               Text="MXP Terminal 1 &amp; 2"
+               TextColor="#455A64"
+               FontSize="12"
+               FontAttributes="Bold"
+               CharacterSpacing="1"
+               VerticalOptions="Center" />
+        <Label Grid.Column="1"
+               Text="€13,00"
+               TextColor="#0D47A1"
+               FontSize="16"
+               FontAttributes="Bold"
+               VerticalOptions="Center" />
+    </Grid>
+
+    <!-- Bilgi satırı: saat -->
+    <HorizontalStackLayout Spacing="8">
+        <Label Text="🕐" FontSize="14" VerticalOptions="Center" />
+        <Label Text="04:27'de başlar — 00:20'de biter" FontSize="14" TextColor="#191C1D" VerticalOptions="Center" />
+    </HorizontalStackLayout>
+
+    <!-- Bilgi satırı: konum -->
+    <HorizontalStackLayout Spacing="8">
+        <Label Text="📍" FontSize="14" VerticalOptions="Center" />
+        <Label Text="Cadorna veya Centrale'den kalkar" FontSize="14" TextColor="#191C1D" VerticalOptions="Center" />
+    </HorizontalStackLayout>
+
+    <!-- Buton -->
+    <Button Text="Bilet Al"
+            BackgroundColor="#FFFFFF"
+            TextColor="#0D47A1"
+            BorderColor="#0D47A1"
+            BorderWidth="1"
+            FontSize="14"
+            HeightRequest="44"
+            CornerRadius="8"
+            Margin="0,8,0,0" />
+
+</VerticalStackLayout>
+
+------------------------------------------------------------------------------------
+
+<!-- ============ BENTO GRID (HIZLI ERİŞİM) ============ -->
+<Grid Padding="20,24,20,0"
+      ColumnDefinitions="*, *"
+      RowDefinitions="Auto, Auto"
+      ColumnSpacing="16"
+      RowSpacing="16">
+
+    <!-- Metro kartı: iki kolonu birden kaplar -->
+    <Border Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BackgroundColor="#F3F4F5"
+            Stroke="#C3C6D4"
+            StrokeThickness="1"
+            Padding="16"
+            StrokeShape="RoundRectangle 12">
+
+        <VerticalStackLayout Spacing="8">
+            <Label Text="🚇" FontSize="28" TextColor="#0D47A1" />
+            <Label Text="Metro Rehberi" FontSize="24" FontAttributes="Bold" TextColor="#0D47A1" />
+            <Label Text="Tüm metropolü birbirine bağlayan 5 hat." FontSize="16" TextColor="#434652" />
+            <Button Text="Tam Haritayı Gör"
+                    BackgroundColor="#0D47A1"
+                    TextColor="#FFFFFF"
+                    FontSize="14"
+                    HeightRequest="40"
+                    CornerRadius="8"
+                    HorizontalOptions="Start"
+                    Padding="16,0"
+                    Margin="0,8,0,0" />
+        </VerticalStackLayout>
+
+    </Border>
+
+</Grid>
+
+------------------------------------------------------------------------------------
+
+<!-- Bilet kartı: sol alt -->
+<Border Grid.Row="1"
+        Grid.Column="0"
+        BackgroundColor="#FEF6D6"
+        Stroke="#FED65B"
+        StrokeThickness="1"
+        Padding="16"
+        StrokeShape="RoundRectangle 12">
+
+    <VerticalStackLayout Spacing="8">
+        <Label Text="🎫" FontSize="28" TextColor="#745C00" />
+        <Label Text="Biletler" FontSize="24" FontAttributes="Bold" TextColor="#745C00" />
+        <Label Text="€2,20 Tek Yön" FontSize="14" FontAttributes="Bold" TextColor="#745C00" Margin="0,8,0,0" />
+        <Label Text="Tüm geçişlerde temassız ödeme kabul edilir" FontSize="12" TextColor="#745C00" />
+    </VerticalStackLayout>
+
+</Border>
+
+<!-- Havaalanı kartı: sağ alt -->
+<Border Grid.Row="1"
+        Grid.Column="1"
+        BackgroundColor="#F3F4F5"
+        Stroke="#C3C6D4"
+        StrokeThickness="1"
+        Padding="16"
+        StrokeShape="RoundRectangle 12">
+
+    <VerticalStackLayout Spacing="8">
+        <Label Text="🛫" FontSize="28" TextColor="#0D47A1" />
+        <Label Text="Havaalanları" FontSize="24" FontAttributes="Bold" TextColor="#0D47A1" />
+        <Label Text="Malpensa'ya her 30 dakikada bir ekspres tren." FontSize="16" TextColor="#434652" />
+    </VerticalStackLayout>
+
+</Border>
+
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------

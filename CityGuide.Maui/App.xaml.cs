@@ -12,7 +12,7 @@ namespace CityGuide.Maui
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new WelcomePage());
+            return new Window(new TransportationPage());
         }
     }
 }
