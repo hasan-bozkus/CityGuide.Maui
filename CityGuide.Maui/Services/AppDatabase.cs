@@ -22,6 +22,7 @@ namespace CityGuide.Maui.Services
             // Code-first: modellere bakıp tabloları oluştur (yoksa)
             await _connection.CreateTableAsync<Category>();
             await _connection.CreateTableAsync<Event>();
+            await _connection.CreateTableAsync<User>();
         }
 
         // --- Okuma metotları ---
@@ -72,6 +73,24 @@ namespace CityGuide.Maui.Services
         {
             await InitAsync();
             return await _connection.InsertAsync(newEvent);
+        }
+
+        // --- Kullanıcı metotları ---
+
+        // Yeni kullanıcı ekler. E-posta zaten varsa [Unique] yüzünden hata fırlatır.
+        public async Task<int> AddUserAsync(User user)
+        {
+            await InitAsync();
+            return await _connection.InsertAsync(user);
+        }
+
+        // E-postaya göre kullanıcı arar. Bulamazsa null döner.
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            await InitAsync();
+            return await _connection.Table<User>()
+                                  .Where(u => u.Email == email)
+                                  .FirstOrDefaultAsync();
         }
     }
 }
