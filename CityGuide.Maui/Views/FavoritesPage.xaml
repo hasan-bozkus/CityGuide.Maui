@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.FavoritesPage"
+             Title="FavoritesPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Favorilerin"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Mardin'in en iyi deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- FİLTRE ÇUBUĞU -->
+        <CollectionView Grid.Row="1"
+                        x:Name="FilterCollection"
+                        ItemsLayout="HorizontalList"
+                        SelectionMode="Single"
+                        SelectionChanged="OnFilterSelectionChanged"
+                        HeightRequest="56"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeThickness="1"
+                            Padding="18,8"
+                            Margin="0,0,8,0"
+                            StrokeShape="RoundRectangle 20"
+                            VerticalOptions="Center">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#FFFFFF" />
+                                        <Setter Property="Stroke" Value="#C3C6D4" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                        <Setter Property="Stroke" Value="#0D47A1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Label Text="{Binding .}"
+                               FontFamily="Inter"
+                               FontSize="14"
+                               TextColor="#455A64"
+                               VerticalOptions="Center" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Mekan listesi -->
+        <CollectionView Grid.Row="2"
+                        x:Name="PlacesCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <!-- Rozet + kalp: iki uca yaslı -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+
+                                <!-- Kategori rozeti -->
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#0D47A1"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="10,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding CategoryName}"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           TextColor="#FFFFFF" />
+                                </Border>
+
+                                <!-- Kalp ikonu (sağda) -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding HeartIcon}"
+                                       TextColor="{Binding HeartColor}"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="24"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnFavoriteTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+
+                            </Grid>
+
+                            <!-- Başlık + puan -->
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe838;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="16"
+                                           TextColor="#D4AF37"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Score}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Konum -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#xe0c8;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Location}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

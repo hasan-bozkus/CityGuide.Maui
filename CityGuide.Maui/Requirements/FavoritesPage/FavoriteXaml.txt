@@ -1,0 +1,717 @@
+﻿﻿// --- Mekan (Place) metotları ---
+
+public async Task<List<Place>> GetPlacesAsync()
+{
+    await InitAsync();
+    return await _database.Table<Place>().ToListAsync();
+}
+
+// --- Favori metotları ---
+
+// Bir mekanı favorilere ekler (insert)
+public async Task<int> AddFavoriteAsync(int userId, int placeId)
+{
+    await InitAsync();
+    var favorite = new Favorite { UserId = userId, PlaceId = placeId };
+    return await _database.InsertAsync(favorite);
+}
+
+// Bir mekanı favorilerden çıkarır (delete)
+public async Task<int> RemoveFavoriteAsync(int userId, int placeId)
+{
+    await InitAsync();
+    var existing = await _database.Table<Favorite>()
+        .Where(f => f.UserId == userId && f.PlaceId == placeId)
+        .FirstOrDefaultAsync();
+
+    if (existing is null)
+        return 0;
+
+    return await _database.DeleteAsync(existing);
+}
+
+// Bir mekan favori mi? (true/false)
+public async Task<bool> IsFavoriteAsync(int userId, int placeId)
+{
+    await InitAsync();
+    var existing = await _database.Table<Favorite>()
+        .Where(f => f.UserId == userId && f.PlaceId == placeId)
+        .FirstOrDefaultAsync();
+
+    return existing is not null;
+}
+
+// Bir kullanıcının favorilediği mekanları getirir (join mantığı)
+public async Task<List<Place>> GetFavoritePlacesAsync(int userId)
+{
+    await InitAsync();
+
+    // 1) Bu kullanıcının favori kayıtlarını çek
+    var favorites = await _database.Table<Favorite>()
+        .Where(f => f.UserId == userId)
+        .ToListAsync();
+
+    // 2) Favorilenen PlaceId'leri topla
+    var favoritePlaceIds = favorites.Select(f => f.PlaceId).ToList();
+
+    // 3) Bu Id'lere sahip mekanları çek
+    var allPlaces = await _database.Table<Place>().ToListAsync();
+    var favoritePlaces = allPlaces
+        .Where(p => favoritePlaceIds.Contains(p.Id))
+        .ToList();
+
+    return favoritePlaces;
+}
+
+-----------------------------------------------------------------------------------------------
+
+ protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Tabloları oluşturmak ve durumu görmek için geçici
+        var places = await _db.GetPlacesAsync();
+        await DisplayAlert("Veritabanı", $"{places.Count} mekan bulundu.", "Tamam");
+    }
+
+
+-----------------------------------------------------------------------------------------------
+
+INSERT INTO Places (Title, CategoryName, ImageUrl, Score, Location) VALUES
+('Trattoria Trippa', 'Restoran', 'place_trattoria.jpg', 4.9, 'Porta Romana, Milano'),
+('Pinacoteca di Brera', 'Müze', 'place_brera.jpg', 4.8, 'Brera, Milano'),
+('Navigli Kanal Yürüyüşü', 'Rota', 'place_navigli.jpg', 4.7, 'Navigli, Milano'),
+('Ristorante Cracco', 'Restoran', 'place_cracco.jpg', 4.6, 'Galleria Vittorio Emanuele II, Milano'),
+('Bar Luce', 'Kafe', 'place_barluce.jpg', 4.5, 'Fondazione Prada, Milano');
+
+
+-----------------------------------------------------------------------------------------------
+
+INSERT INTO Places (Title, CategoryName, ImageUrl, Score, Location) VALUES
+('Ristorante Berton', 'Restoran', 'place_berton.jpg', 4.7, 'Porta Nuova, Milano'),
+('Osteria del Binari', 'Restoran', 'place_binari.jpg', 4.4, 'Porta Genova, Milano'),
+('Museo del Novecento', 'Müze', 'place_novecento.jpg', 4.6, 'Piazza del Duomo, Milano'),
+('Museo Nazionale Scienza e Tecnologia', 'Müze', 'place_scienza.jpg', 4.7, 'SantAmbrogio, Milano'),
+('Gallerie dItalia', 'Müze', 'place_gallerie.jpg', 4.5, 'Piazza della Scala, Milano'),
+('Parco Sempione Yürüyüşü', 'Rota', 'place_sempione.jpg', 4.6, 'Sempione, Milano'),
+('Duomo Teras Turu', 'Rota', 'place_duomo.jpg', 4.9, 'Piazza del Duomo, Milano'),
+('Brera Sanat Rotası', 'Rota', 'place_brerawalk.jpg', 4.5, 'Brera, Milano'),
+('Pasticceria Marchesi', 'Kafe', 'place_marchesi.jpg', 4.7, 'Via Montenapoleone, Milano'),
+('Cova Milano', 'Kafe', 'place_cova.jpg', 4.6, 'Via Montenapoleone, Milano'),
+('Pave Milano', 'Kafe', 'place_pave.jpg', 4.5, 'Porta Venezia, Milano'),
+('Ristorante Il Luogo di Aimo e Nadia', 'Restoran', 'place_aimo.jpg', 4.8, 'Bande Nere, Milano'),
+('Fondazione Prada', 'Müze', 'place_prada.jpg', 4.6, 'Largo Isarco, Milano'),
+('Canal Grande Bisiklet Rotası', 'Rota', 'place_canalbike.jpg', 4.4, 'Navigli, Milano'),
+('Terrazza Aperol', 'Kafe', 'place_aperol.jpg', 4.3, 'Piazza del Duomo, Milano');
+
+
+-----------------------------------------------------------------------------------------------
+
+INSERT INTO Places (Title, CategoryName, ImageUrl, Score, Location) VALUES
+('Langosteria Milano', 'Restoran', 'place_langosteria.jpg', 4.7, 'Porta Genova, Milano'),
+('Trattoria Masuelli', 'Restoran', 'place_masuelli.jpg', 4.5, 'Porta Romana, Milano'),
+('Museo Poldi Pezzoli', 'Müze', 'place_poldi.jpg', 4.6, 'Via Manzoni, Milano'),
+('Casa Museo Boschi di Stefano', 'Müze', 'place_boschi.jpg', 4.4, 'Porta Venezia, Milano'),
+('Isola Mahalle Rotası', 'Rota', 'place_isola.jpg', 4.5, 'Isola, Milano'),
+('Corso Como Yürüyüşü', 'Rota', 'place_corsocomo.jpg', 4.3, 'Porta Nuova, Milano'),
+('Sant Ambrogio Tarihi Rota', 'Rota', 'place_ambrogio.jpg', 4.6, 'SantAmbrogio, Milano'),
+('Caffe Napoleon', 'Kafe', 'place_napoleon.jpg', 4.4, 'Brera, Milano'),
+('Gelateria Marghera', 'Kafe', 'place_marghera.jpg', 4.7, 'Wagner, Milano'),
+('Panificio Davide Longoni', 'Kafe', 'place_longoni.jpg', 4.6, 'Porta Romana, Milano');
+
+
+-----------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.FavoritesPage"
+             Title="FavoritesPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Favorilerin"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun en iyi deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- Mekan listesi -->
+        <CollectionView Grid.Row="1"
+                        x:Name="PlacesCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <!-- Kategori rozeti -->
+                            <Border BackgroundColor="#0D47A1"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 10"
+                                    Padding="10,3"
+                                    HorizontalOptions="Start">
+                                <Label Text="{Binding CategoryName}"
+                                       FontFamily="Inter"
+                                       FontSize="11"
+                                       TextColor="#FFFFFF" />
+                            </Border>
+
+                            <!-- Başlık + puan -->
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe838;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="16"
+                                           TextColor="#D4AF37"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Score}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Konum -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#xe0c8;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Location}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+
+-----------------------------------------------------------------------------------------------
+
+ protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        var places = await _db.GetPlacesAsync();
+        PlacesCollection.ItemsSource = places;
+    }
+
+
+-----------------------------------------------------------------------------------------------
+
+using CityGuide.Maui.Models;
+using CityGuide.Maui.Services;
+
+namespace CityGuide.Maui.Views;
+
+public partial class FavoritesPage : ContentPage
+{
+    private readonly AppDatabase _db = new AppDatabase();
+
+    // Şimdilik sabit kullanıcı (oturum yönetimi sonra gelecek)
+    private const int CurrentUserId = 1;
+
+    public FavoritesPage()
+    {
+        InitializeComponent();
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadPlacesAsync();
+    }
+
+    private async Task LoadPlacesAsync()
+    {
+        var places = await _db.GetPlacesAsync();
+
+        // Her mekan için favori mi diye işaretle
+        foreach (var place in places)
+        {
+            place.IsFavorite = await _db.IsFavoriteAsync(CurrentUserId, place.Id);
+        }
+
+        PlacesCollection.ItemsSource = places;
+    }
+
+    // Kalbe tıklanınca
+    private async void OnFavoriteTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is not Label label) return;
+        if (label.BindingContext is not Place place) return;
+
+        if (place.IsFavorite)
+        {
+            // Favorideyse çıkar
+            await _db.RemoveFavoriteAsync(CurrentUserId, place.Id);
+        }
+        else
+        {
+            // Favoride değilse ekle
+            await _db.AddFavoriteAsync(CurrentUserId, place.Id);
+        }
+
+        // Listeyi yenile (kalpler güncellensin)
+        await LoadPlacesAsync();
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------
+
+<!-- Rozet + kalp: iki uca yaslı -->
+<Grid ColumnDefinitions="Auto, *, Auto">
+
+    <!-- Kategori rozeti -->
+    <Border Grid.Column="0"
+            BackgroundColor="#0D47A1"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 10"
+            Padding="10,3"
+            HorizontalOptions="Start">
+        <Label Text="{Binding CategoryName}"
+               FontFamily="Inter"
+               FontSize="11"
+               TextColor="#FFFFFF" />
+    </Border>
+
+    <!-- Kalp ikonu (sağda) -->
+    <Label Grid.Column="2"
+           Text="{Binding IsFavorite, Converter={StaticResource HeartConverter}}"
+           FontFamily="MaterialSymbols"
+           FontSize="24"
+           TextColor="#BA1A1A"
+           VerticalOptions="Center">
+        <Label.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnFavoriteTapped" />
+        </Label.GestureRecognizers>
+    </Label>
+
+</Grid>
+
+
+-----------------------------------------------------------------------------------------------
+
+// Kalbin ikonu: favoriyse dolu kalp, değilse boş kalp
+[Ignore]
+public string HeartIcon => IsFavorite ? "\ue87d" : "\ue87e";
+
+// Kalbin rengi: favoriyse kırmızı, değilse gri
+[Ignore]
+public string HeartColor => IsFavorite ? "#BA1A1A" : "#737783";
+
+
+-----------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.FavoritesPage"
+             Title="FavoritesPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Favorilerin"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun en iyi deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- Mekan listesi -->
+        <CollectionView Grid.Row="1"
+                        x:Name="PlacesCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <!-- Rozet + kalp: iki uca yaslı -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+
+                                <!-- Kategori rozeti -->
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#0D47A1"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="10,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding CategoryName}"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           TextColor="#FFFFFF" />
+                                </Border>
+
+                                <!-- Kalp ikonu (sağda) -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding HeartIcon}"
+                                       TextColor="{Binding HeartColor}"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="24"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnFavoriteTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+
+                            </Grid>
+
+                            <!-- Başlık + puan -->
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe838;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="16"
+                                           TextColor="#D4AF37"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Score}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Konum -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#xe0c8;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Location}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+
+-----------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.FavoritesPage"
+             Title="FavoritesPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Favorilerin"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun en iyi deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- FİLTRE ÇUBUĞU -->
+        <CollectionView Grid.Row="1"
+                        x:Name="FilterCollection"
+                        ItemsLayout="HorizontalList"
+                        SelectionMode="Single"
+                        SelectionChanged="OnFilterSelectionChanged"
+                        HeightRequest="56"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StrokeThickness="1"
+                            Padding="18,8"
+                            Margin="0,0,8,0"
+                            StrokeShape="RoundRectangle 20"
+                            VerticalOptions="Center">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#FFFFFF" />
+                                        <Setter Property="Stroke" Value="#C3C6D4" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                        <Setter Property="Stroke" Value="#0D47A1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Label Text="{Binding .}"
+                               FontFamily="Inter"
+                               FontSize="14"
+                               TextColor="#455A64"
+                               VerticalOptions="Center" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Mekan listesi -->
+        <CollectionView Grid.Row="2"
+                        x:Name="PlacesCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <!-- Rozet + kalp: iki uca yaslı -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+
+                                <!-- Kategori rozeti -->
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#0D47A1"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="10,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding CategoryName}"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           TextColor="#FFFFFF" />
+                                </Border>
+
+                                <!-- Kalp ikonu (sağda) -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding HeartIcon}"
+                                       TextColor="{Binding HeartColor}"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="24"
+                                       VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnFavoriteTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+
+                            </Grid>
+
+                            <!-- Başlık + puan -->
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe838;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="16"
+                                           TextColor="#D4AF37"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Score}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Konum -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#xe0c8;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Location}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+
+-----------------------------------------------------------------------------------------------
+
+using CityGuide.Maui.Models;
+using CityGuide.Maui.Services;
+
+namespace CityGuide.Maui.Views;
+
+public partial class FavoritesPage : ContentPage
+{
+    private readonly AppDatabase _db = new AppDatabase();
+    private const int CurrentUserId = 1;
+
+    // Tüm mekanları bellekte tut (filtreleme için)
+    private List<Place> _allPlaces = new List<Place>();
+    private string _selectedCategory = "Tümü";
+
+    public FavoritesPage()
+    {
+        InitializeComponent();
+
+        // Filtre haplarını doldur
+        FilterCollection.ItemsSource = new List<string>
+        {
+            "Tümü", "Restoran", "Müze", "Rota", "Kafe"
+        };
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadPlacesAsync();
+
+        // Başlangıçta "Tümü" seçili
+        FilterCollection.SelectedItem = "Tümü";
+    }
+
+    private async Task LoadPlacesAsync()
+    {
+        var places = await _db.GetPlacesAsync();
+
+        // Her mekan için favori mi diye işaretle
+        foreach (var place in places)
+        {
+            place.IsFavorite = await _db.IsFavoriteAsync(CurrentUserId, place.Id);
+        }
+
+        _allPlaces = places;
+        ApplyFilter();
+    }
+
+    // Seçili kategoriye göre listeyi süz
+    private void ApplyFilter()
+    {
+        if (_selectedCategory == "Tümü")
+        {
+            PlacesCollection.ItemsSource = _allPlaces;
+        }
+        else
+        {
+            PlacesCollection.ItemsSource = _allPlaces
+                .Where(p => p.CategoryName == _selectedCategory)
+                .ToList();
+        }
+    }
+
+    private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not string category)
+            return;
+
+        _selectedCategory = category;
+        ApplyFilter();
+    }
+
+    // Kalbe tıklanınca
+    private async void OnFavoriteTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is not Label label) return;
+        if (label.BindingContext is not Place place) return;
+
+        if (place.IsFavorite)
+            await _db.RemoveFavoriteAsync(CurrentUserId, place.Id);
+        else
+            await _db.AddFavoriteAsync(CurrentUserId, place.Id);
+
+        await LoadPlacesAsync();
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
