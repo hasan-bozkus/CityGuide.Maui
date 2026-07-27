@@ -1,0 +1,6 @@
+@CityGuide.WebApi_HostAddress = http://localhost:5095
+
+GET {{CityGuide.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

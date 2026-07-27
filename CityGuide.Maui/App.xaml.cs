@@ -12,7 +12,7 @@ namespace CityGuide.Maui
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            var window = new Window(new FavoritesPage());
+            var window = new Window(new SpecialEventPage());
 
             window.Width = 393;
             window.Height = 652;

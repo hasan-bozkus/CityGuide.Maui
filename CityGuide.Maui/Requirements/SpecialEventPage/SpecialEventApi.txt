@@ -1,0 +1,468 @@
+﻿﻿   private SQLiteAsyncConnection? _database;
+
+        private async Task InitAsync()
+        {
+            if (_database is not null)
+                return;
+
+            // API'nin kendi veritabanı dosyası
+            var dbPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "events.db");
+
+            _database = new SQLiteAsyncConnection(dbPath);
+            await _database.CreateTableAsync<SpecialEvent>();
+
+            // Tablo boşsa örnek verileri ekle (seed)
+            var count = await _database.Table<SpecialEvent>().CountAsync();
+            if (count == 0)
+            {
+                await SeedAsync();
+            }
+        }
+
+        private async Task SeedAsync()
+        {
+            var events = new List<SpecialEvent>
+            {
+                new SpecialEvent
+                {
+                    Title = "Salone del Mobile",
+                    Description = "Dünyanın önde gelen tasarım fuarı; yaşam ve tasarım yeniliklerinin geleceğini sergiliyor.",
+                    DateText = "16 - 21 Nisan",
+                    Category = "Öne Çıkan",
+                    Rating = 4.9,
+                    ImageUrl = "event_salone.jpg"
+                },
+                new SpecialEvent
+                {
+                    Title = "Milano Moda Haftası",
+                    Description = "İtalyan zarafetinin ve küresel moda trendlerinin zirvesini deneyimleyin.",
+                    DateText = "Şubat & Eylül",
+                    Category = "Canlı",
+                    Rating = 4.8,
+                    ImageUrl = "event_fashion.jpg"
+                },
+                new SpecialEvent
+                {
+                    Title = "Noel Pazarları",
+                    Description = "Duomo'nun gölgesinde otantik el sanatları ve festival lezzetleri.",
+                    DateText = "1 Aralık - 6 Ocak",
+                    Category = "Kış",
+                    Rating = 4.9,
+                    ImageUrl = "event_christmas.jpg"
+                },
+                new SpecialEvent
+                {
+                    Title = "JazzMi Festivali",
+                    Description = "Tarihi mekanlarda ve gizli barlarda şehir çapında caz etkinlikleri.",
+                    DateText = "Ekim - Kasım",
+                    Category = "Sonbahar",
+                    Rating = 4.7,
+                    ImageUrl = "event_jazz.jpg"
+                },
+                new SpecialEvent
+                {
+                    Title = "La Scala Açılış Gecesi",
+                    Description = "Milano kültür takviminin en prestijli akşamı.",
+                    DateText = "7 Aralık",
+                    Category = "Öne Çıkan",
+                    Rating = 5.0,
+                    ImageUrl = "event_scala.jpg"
+                },
+                new SpecialEvent
+                {
+                    Title = "Taste of Milano",
+                    Description = "Milano'nun en iyi şeflerinin sunduğu seçkin lezzetlerde bir yolculuk.",
+                    DateText = "8 - 12 Mayıs",
+                    Category = "Yaz",
+                    Rating = 4.6,
+                    ImageUrl = "event_taste.jpg"
+                }
+            };
+
+            await _database!.InsertAllAsync(events);
+        }
+
+        // Tüm etkinlikleri getir
+        public async Task<List<SpecialEvent>> GetSpecialEventsAsync()
+        {
+            await InitAsync();
+            return await _database!.Table<SpecialEvent>().ToListAsync();
+        }
+-----------------------------------------------------------------
+
+  public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string DateText { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public double Rating { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+
+
+-----------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.SpecialEventsPage"
+             Title="SpecialEventsPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Özel Etkinlikler"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun öne çıkan deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- Etkinlik listesi -->
+        <CollectionView Grid.Row="1"
+                        x:Name="EventsCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="6">
+
+                            <!-- Kategori rozeti + puan -->
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Border Grid.Column="0"
+                                        BackgroundColor="#D4AF37"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="10,3"
+                                        HorizontalOptions="Start">
+                                    <Label Text="{Binding Category}"
+                                           FontFamily="Inter"
+                                           FontSize="11"
+                                           TextColor="#FFFFFF" />
+                                </Border>
+
+                                <HorizontalStackLayout Grid.Column="2" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe838;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="16"
+                                           TextColor="#D4AF37"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Rating}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Başlık -->
+                            <Label Text="{Binding Title}"
+                                   FontFamily="HankenBold"
+                                   FontSize="20"
+                                   TextColor="#0D47A1" />
+
+                            <!-- Açıklama -->
+                            <Label Text="{Binding Description}"
+                                   FontFamily="HankenRegular"
+                                   FontSize="14"
+                                   TextColor="#434652" />
+
+                            <!-- Tarih -->
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#xe935;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding DateText}"
+                                       FontFamily="Inter"
+                                       FontSize="14"
+                                       TextColor="#0D47A1"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+
+-----------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.SpecialEventsPage"
+             Title="SpecialEventsPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Özel Etkinlikler"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun öne çıkan deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- Etkinlik listesi -->
+        <CollectionView Grid.Row="1"
+                        x:Name="EventsCollection"
+                        Margin="20,8">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            Margin="0,0,0,16"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <!-- Etkinlik görseli (kartın üstü) -->
+                            <Image Source="{Binding ImageUrl}"
+                                   Aspect="AspectFill"
+                                   HeightRequest="160" />
+
+                            <!-- İçerik (görselin altı) -->
+                            <VerticalStackLayout Spacing="6" Padding="16">
+
+                                <!-- Kategori rozeti + puan -->
+                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                    <Border Grid.Column="0"
+                                            BackgroundColor="#D4AF37"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="10,3"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding Category}"
+                                               FontFamily="Inter"
+                                               FontSize="11"
+                                               TextColor="#FFFFFF" />
+                                    </Border>
+
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="4" VerticalOptions="Center">
+                                        <Label Text="&#xe838;"
+                                               FontFamily="MaterialSymbols"
+                                               FontSize="16"
+                                               TextColor="#D4AF37"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding Rating}"
+                                               FontFamily="Inter"
+                                               FontSize="14"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <!-- Başlık -->
+                                <Label Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1" />
+
+                                <!-- Açıklama -->
+                                <Label Text="{Binding Description}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#434652" />
+
+                                <!-- Tarih -->
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label Text="&#xe935;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="14"
+                                           TextColor="#0D47A1"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding DateText}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#0D47A1"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+-----------------------------------------------------------------
+
+<!-- Etkinlik görseli (kartın üstü) -->
+<Border StrokeThickness="0"
+        StrokeShape="RoundRectangle 12,12,0,0">
+    <Image Source="{Binding ImageUrl}"
+           Aspect="AspectFill"
+           HeightRequest="160" />
+</Border>
+
+
+-----------------------------------------------------------------
+
+Margin="0,0,0,20"
+
+
+-----------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.SpecialEventsPage"
+             Title="SpecialEventsPage"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Başlık -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="Özel Etkinlikler"
+                   FontFamily="HankenBold"
+                   FontSize="28"
+                   TextColor="#0D47A1" />
+            <Label Text="Milano'nun öne çıkan deneyimleri"
+                   FontFamily="HankenRegular"
+                   FontSize="16"
+                   TextColor="#455A64" />
+        </VerticalStackLayout>
+
+        <!-- Etkinlik listesi -->
+        <CollectionView Grid.Row="1"
+                        x:Name="EventsCollection"
+                        Margin="20,8,20,16">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 12">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <!-- Etkinlik görseli (kartın üstü) -->
+                            <Border StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12,12,0,0">
+                                <Image Source="{Binding ImageUrl}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="160" />
+                            </Border>
+
+                            <!-- İçerik (görselin altı) -->
+                            <VerticalStackLayout Spacing="6" Padding="16">
+
+                                <!-- Kategori rozeti + puan -->
+                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                    <Border Grid.Column="0"
+                                            BackgroundColor="#D4AF37"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="10,3"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding Category}"
+                                               FontFamily="Inter"
+                                               FontSize="11"
+                                               TextColor="#FFFFFF" />
+                                    </Border>
+
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="4" VerticalOptions="Center">
+                                        <Label Text="&#xe838;"
+                                               FontFamily="MaterialSymbols"
+                                               FontSize="16"
+                                               TextColor="#D4AF37"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding Rating}"
+                                               FontFamily="Inter"
+                                               FontSize="14"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <!-- Başlık -->
+                                <Label Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="20"
+                                       TextColor="#0D47A1" />
+
+                                <!-- Açıklama -->
+                                <Label Text="{Binding Description}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="14"
+                                       TextColor="#434652" />
+
+                                <!-- Tarih -->
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label Text="&#xe935;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="14"
+                                           TextColor="#0D47A1"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding DateText}"
+                                           FontFamily="Inter"
+                                           FontSize="14"
+                                           TextColor="#0D47A1"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
+
+-----------------------------------------------------------------
