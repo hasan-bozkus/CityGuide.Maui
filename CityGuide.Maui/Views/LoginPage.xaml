@@ -258,7 +258,7 @@
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="Hesabın yok mu? " />
-                                    <Span Text="Erişim Talep Et"
+                                    <Span Text="Bir Hesap Oluştur"
                                           TextColor="#0D47A1"
                                           FontFamily="HankenBold"
                                           TextDecorations="Underline">

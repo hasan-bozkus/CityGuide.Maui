@@ -52,7 +52,7 @@ public partial class LoginPage : ContentPage
         }
 
         // 5) Başarılı giriş
-        await DisplayAlertAsync("Hoş Geldiniz", $"Giriş başarılı! Merhaba, {user.FullName}.", "Tamam");
+        await Shell.Current.GoToAsync("//home");
     }
 
     private async void OnGoogleTapped(object sender, TappedEventArgs e)
@@ -67,6 +67,6 @@ public partial class LoginPage : ContentPage
 
     private async void OnRequestAccessTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlertAsync("Erişim Talep Et", "Kayıt ekranı yakında bağlanacak.", "Tamam");
+        await Shell.Current.GoToAsync("//register");
     }
 }

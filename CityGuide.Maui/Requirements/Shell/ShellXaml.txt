@@ -1,0 +1,57 @@
+﻿﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:CityGuide.Maui.Views"
+       x:Class="CityGuide.Maui.AppShell"
+       FlyoutBehavior="Disabled">
+
+    <!-- Splash (başlangıç) -->
+    <ShellContent Route="splash"
+                  ContentTemplate="{DataTemplate views:SplashPage}"
+                  Shell.NavBarIsVisible="False" />
+
+    <!-- Login -->
+    <ShellContent Route="login"
+                  ContentTemplate="{DataTemplate views:LoginPage}"
+                  Shell.NavBarIsVisible="False" />
+
+    <!-- Register -->
+    <ShellContent Route="register"
+                  ContentTemplate="{DataTemplate views:RegisterPage}"
+                  Shell.NavBarIsVisible="False" />
+
+</Shell>
+
+-------------------------------------------------------------------------------------
+
+protected override void OnAppearing()
+{
+    base.OnAppearing();
+
+    BackgroundImage.Source = _images[0];
+
+    StartZoomAnimation();
+    StartSlideshow();
+    StartLoadingBar();
+
+    // 10 saniye sonra Login'e geç
+    NavigateAfterDelay();
+}
+
+private async void NavigateAfterDelay()
+{
+    await Task.Delay(10000);  // 10 saniye
+
+    if (!_isRunning) return;  // Sayfa zaten kapandıysa geçme
+
+    await Shell.Current.GoToAsync("//login");
+}
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------

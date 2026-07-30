@@ -1,0 +1,323 @@
+﻿﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.SplashPage"
+             BackgroundColor="#000000"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <!-- Tüm katmanlar üst üste (aynı Grid hücresi) -->
+    <Grid>
+
+        <!-- KATMAN 1: Arka plan görseli -->
+        <Image Source="{Binding SplashImageUrl}"
+               x:Name="BackgroundImage"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+        <!-- KATMAN 2: Karartma gradyanı (metin okunsun diye) -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#66000000" Offset="0.0" />
+                    <GradientStop Color="#1A000000" Offset="0.5" />
+                    <GradientStop Color="#99000000" Offset="1.0" />
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- KATMAN 3: Merkez içerik (logo + başlık) -->
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="24">
+
+            <!-- Dairesel logo -->
+            <Border BackgroundColor="#1AFFFFFF"
+                    Stroke="#4DFFFFFF"
+                    StrokeThickness="1"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    StrokeShape="RoundRectangle 40"
+                    HorizontalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="40"
+                       TextColor="#D4AF37"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <!-- Başlık -->
+            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                <Label Text="MILANO"
+                       FontFamily="HankenBold"
+                       FontSize="40"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="8" />
+                <Label Text="CITY GUIDE"
+                       FontFamily="Inter"
+                       FontSize="14"
+                       TextColor="#CCFFFFFF"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="6" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+        <!-- KATMAN 4: Alt slogan -->
+        <Label Text="CURATED EXPERIENCES"
+               FontFamily="Inter"
+               FontSize="12"
+               TextColor="#99FFFFFF"
+               HorizontalOptions="Center"
+               VerticalOptions="End"
+               Margin="0,0,0,40"
+               CharacterSpacing="4" />
+
+    </Grid>
+
+</ContentPage>
+
+-------------------------------------------------------------------------------------
+
+// Arka plan görseli (tasarımdaki Duomo URL'si)
+    public string SplashImageUrl { get; set; } =
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuAnd307xGDhn9URVuTzK0yVpoqW_2DeXKy1HzFd4VwLlIkknx4HhINqJTCz18xyuco1_fi-cdcX0t1-EICvad4tRoFXCOJ7tloNHg-GS8rrhiqsBm62XHG15fuEXoeIISvQK0L1XNE5vB6_vYzadLYvsOZV2TjJ0mVDGbUqNAMwN76sO95zgNZOltHD7iSy_-LHawUdYRcgXGCW7nDFC3z4wXlg9upfzy1_nx4vhF1rje7SjLun2_ScO2-1mGRXkdYDpx-FILpwoXmR";
+
+    public SplashPage()
+    {
+        InitializeComponent();
+        BindingContext = this;
+    }
+
+
+-------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.SplashPage"
+             BackgroundColor="#000000"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <!-- Tüm katmanlar üst üste (aynı Grid hücresi) -->
+    <Grid>
+
+        <!-- KATMAN 1: Arka plan görseli -->
+        <Image Source="{Binding SplashImageUrl}"
+               x:Name="BackgroundImage"
+               Aspect="AspectFill"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+
+        <!-- KATMAN 2: Karartma gradyanı (metin okunsun diye) -->
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#66000000" Offset="0.0" />
+                    <GradientStop Color="#1A000000" Offset="0.5" />
+                    <GradientStop Color="#99000000" Offset="1.0" />
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+
+        <!-- KATMAN 3: Merkez içerik (logo + başlık) -->
+        <VerticalStackLayout VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="24">
+
+            <!-- Dairesel logo -->
+            <Border BackgroundColor="#1AFFFFFF"
+                    Stroke="#4DFFFFFF"
+                    StrokeThickness="1"
+                    WidthRequest="80"
+                    HeightRequest="80"
+                    StrokeShape="RoundRectangle 40"
+                    HorizontalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="40"
+                       TextColor="#D4AF37"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <!-- Başlık -->
+            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                <Label Text="MILANO"
+                       FontFamily="HankenBold"
+                       FontSize="40"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="8" />
+                <Label Text="CITY GUIDE"
+                       FontFamily="Inter"
+                       FontSize="14"
+                       TextColor="#CCFFFFFF"
+                       HorizontalOptions="Center"
+                       CharacterSpacing="6" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+        <!-- KATMAN 4: Yükleniyor çubuğu -->
+        <Border x:Name="LoadingBarTrack"
+                BackgroundColor="#33FFFFFF"
+                StrokeThickness="0"
+                WidthRequest="140"
+                HeightRequest="3"
+                StrokeShape="RoundRectangle 2"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="0,0,0,72">
+            <!-- Dolan kısım -->
+            <BoxView x:Name="LoadingBarFill"
+                     Color="#D4AF37"
+                     WidthRequest="0"
+                     HorizontalOptions="Start" />
+        </Border>
+
+        <!-- KATMAN 5: Alt slogan -->
+        <Label Text="CURATED EXPERIENCES"
+               FontFamily="Inter"
+               FontSize="12"
+               TextColor="#99FFFFFF"
+               HorizontalOptions="Center"
+               VerticalOptions="End"
+               Margin="0,0,0,40"
+               CharacterSpacing="4" />
+
+    </Grid>
+
+</ContentPage>
+-------------------------------------------------------------------------------------
+
+protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // 1) Arka plan görseline yavaş zoom (sürekli)
+        StartZoomAnimation();
+
+        // 2) Yükleniyor çubuğunu doldur (3 saniyede)
+        LoadingBarFill.WidthRequest = 0;
+        await LoadingBarFill.LayoutTo(
+            new Rect(0, 0, 140, 3), 3000, Easing.CubicInOut);
+    }
+
+    private async void StartZoomAnimation()
+    {
+        // Görsel sürekli 1.0 → 1.1 → 1.0 ölçeklensin
+        while (true)
+        {
+            await BackgroundImage.ScaleTo(1.1, 10000, Easing.SinInOut);
+            await BackgroundImage.ScaleTo(1.0, 10000, Easing.SinInOut);
+        }
+    }
+
+
+-------------------------------------------------------------------------------------
+
+https://images.unsplash.com/photo-1594755260889-29d5fb8e2d1f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+
+
+-------------------------------------------------------------------------------------
+
+namespace CityGuide.Maui.Views;
+
+public partial class SplashPage : ContentPage
+{
+    // Arka plan görselleri (Resources/Images'taki dosyalar)
+    private readonly string[] _images = new string[]
+    {
+        "milano_000.jpg",
+        "milano_001.jpg",
+        "milano_002.jpg",
+        "milano_003.jpg",
+        "milano_004.jpg",
+        "milano_005.jpg",
+        "milano_006.jpg",
+        "milano_007.jpg"
+    };
+
+    private int _currentIndex = 0;
+    private bool _isRunning = true;
+
+    public SplashPage()
+    {
+        InitializeComponent();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // İlk görseli ayarla
+        BackgroundImage.Source = _images[0];
+
+        // Animasyonları başlat
+        StartZoomAnimation();
+        StartSlideshow();
+
+        // Yükleniyor çubuğunu doldur
+        StartLoadingBar();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _isRunning = false;  // Sayfa kapanınca döngüleri durdur
+    }
+
+    // Görselleri sırayla değiştir (fade geçişiyle)
+    private async void StartSlideshow()
+    {
+        while (_isRunning)
+        {
+            // 4.5 saniye bekle
+            await Task.Delay(4500);
+
+            if (!_isRunning) break;
+
+            // Sonraki görsele geç
+            _currentIndex = (_currentIndex + 1) % _images.Length;
+
+            // Yumuşak geçiş: kaybol → değiştir → belir
+            await BackgroundImage.FadeTo(0, 600, Easing.CubicInOut);
+            BackgroundImage.Source = _images[_currentIndex];
+            await BackgroundImage.FadeTo(1, 600, Easing.CubicInOut);
+        }
+    }
+
+    // Arka plana sürekli yavaş zoom
+    private async void StartZoomAnimation()
+    {
+        while (_isRunning)
+        {
+            await BackgroundImage.ScaleTo(1.1, 10000, Easing.SinInOut);
+            await BackgroundImage.ScaleTo(1.0, 10000, Easing.SinInOut);
+        }
+    }
+
+    // Yükleniyor çubuğunu doldur
+    private async void StartLoadingBar()
+    {
+        LoadingBarFill.WidthRequest = 0;
+        await LoadingBarFill.LayoutTo(new Rect(0, 0, 140, 3), 3000, Easing.CubicInOut);
+    }
+}
+
+
+-------------------------------------------------------------------------------------
+
+<Image x:Name="BackgroundImage"
+       Aspect="AspectFill"
+       HorizontalOptions="Fill"
+       VerticalOptions="Fill" />
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
