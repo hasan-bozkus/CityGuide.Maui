@@ -9,6 +9,9 @@ namespace CityGuide.Maui
             InitializeComponent();
 
             Routing.RegisterRoute("specialevent", typeof(SpecialEventPage));
+            Routing.RegisterRoute("routedetail", typeof(RouteDetailPage));
+            Routing.RegisterRoute("routes", typeof(RoutesPage));
+            Routing.RegisterRoute("profile", typeof(ProfilePage));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CityGuide.Maui.Views;
 public partial class FavoritesPage : ContentPage
 {
     private readonly AppDatabase _appDatabase = new AppDatabase();
-    private const int CurrentUserId = 1;
+    private int CurrentUserId => CurrentSession.UserId;
 
     // Tüm mekanları bellekte tut (filtreleme için)
     private List<Place> _allPlaces = new List<Place>();

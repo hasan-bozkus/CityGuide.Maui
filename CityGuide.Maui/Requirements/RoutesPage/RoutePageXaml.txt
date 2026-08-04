@@ -1,0 +1,742 @@
+﻿﻿// --- Rotalar ---
+
+// Tüm rotaları getirir (durakları olmadan)
+public async Task<List<Route>> GetRoutesAsync()
+{
+    await InitAsync();
+    return await _database.Table<Route>().ToListAsync();
+}
+
+// Belirli bir rotanın duraklarını, sıralı şekilde getirir
+public async Task<List<RouteStop>> GetRouteStopsAsync(int routeId)
+{
+    await InitAsync();
+    return await _database.Table<RouteStop>()
+                          .Where(s => s.RouteId == routeId)
+                          .OrderBy(s => s.OrderIndex)
+                          .ToListAsync();
+}
+
+-------------------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.RoutesPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,12"
+              ColumnSpacing="12"
+              BackgroundColor="#F8F9FA">
+
+            <Border Grid.Column="0"
+                    BackgroundColor="#0D47A1"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    VerticalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="20"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Milano City Guide"
+                   FontFamily="HankenBold"
+                   FontSize="20"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="2"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="1"
+                    Stroke="#C3C6D4"
+                    StrokeShape="RoundRectangle 18"
+                    VerticalOptions="Center">
+                <Image Source="profile.png" Aspect="AspectFill" />
+            </Border>
+
+        </Grid>
+
+        <!-- ============ HERO + FİLTRE ============ -->
+        <VerticalStackLayout Grid.Row="1" Padding="20,8,20,8" Spacing="16">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="ÖZENLE HAZIRLANMIŞ DENEYİMLER"
+                       FontFamily="Inter"
+                       FontSize="11"
+                       TextColor="#0D47A1"
+                       CharacterSpacing="1.5" />
+                <Label Text="Milano'nun Ruhunu Keşfedin"
+                       FontFamily="HankenBold"
+                       FontSize="28"
+                       TextColor="#191C1D" />
+                <Label Text="Yerel uzmanlar tarafından hazırlanmış rotalarla şehrin gizli hazinelerini ve ikonik simgelerini keşfedin."
+                       FontFamily="HankenRegular"
+                       FontSize="14"
+                       TextColor="#455A64" />
+            </VerticalStackLayout>
+
+            <!-- Kategori filtre çubuğu -->
+            <CollectionView x:Name="FilterCollection"
+                            ItemsLayout="HorizontalList"
+                            SelectionMode="Single"
+                            SelectionChanged="OnFilterSelectionChanged"
+                            HeightRequest="48">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeThickness="1"
+                                Padding="18,8"
+                                Margin="0,0,8,0"
+                                StrokeShape="RoundRectangle 20"
+                                VerticalOptions="Center">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#FFFFFF" />
+                                            <Setter Property="Stroke" Value="#C3C6D4" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                            <Setter Property="Stroke" Value="#0D47A1" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Label Text="{Binding .}"
+                                   FontFamily="Inter"
+                                   FontSize="13"
+                                   TextColor="#455A64"
+                                   VerticalOptions="Center" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+        <!-- ============ ROTA LİSTESİ ============ -->
+        <CollectionView Grid.Row="2"
+                        x:Name="RoutesCollection"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 16">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <Border StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16,16,0,0"
+                                    HeightRequest="160">
+                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                            </Border>
+
+                            <VerticalStackLayout Padding="16" Spacing="6">
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Border Grid.Column="0"
+                                            BackgroundColor="#0D47A1"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="10,3"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding Category}"
+                                               FontFamily="Inter"
+                                               FontSize="11"
+                                               TextColor="#FFFFFF" />
+                                    </Border>
+                                </Grid>
+
+                                <Label Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="18"
+                                       TextColor="#0D47A1" />
+
+                                <Label Text="{Binding Description}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="13"
+                                       TextColor="#434652" />
+
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="&#xe935;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Duration}"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, *, *"
+              BackgroundColor="#FFFFFF"
+              Padding="0,8"
+              HeightRequest="64">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe88a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Ana Sayfa" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe87a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Keşfet" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEventsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe878;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Etkinlikler" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
+
+
+-------------------------------------------------------------------------------------------------------
+
+private readonly AppDatabase _db = new AppDatabase();
+
+    private List<Route> _allRoutes = new List<Route>();
+    private string _selectedCategory = "Tümü";
+
+    public RoutesPage()
+    {
+        InitializeComponent();
+
+        FilterCollection.ItemsSource = new List<string>
+        {
+            "Tümü", "Aile Dostu", "Sanat & Kültür", "Lüks Alışveriş"
+        };
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadRoutesAsync();
+        FilterCollection.SelectedItem = "Tümü";
+    }
+
+    private async Task LoadRoutesAsync()
+    {
+        _allRoutes = await _db.GetRoutesAsync();
+        ApplyFilter();
+    }
+
+    private void ApplyFilter()
+    {
+        if (_selectedCategory == "Tümü")
+        {
+            RoutesCollection.ItemsSource = _allRoutes;
+        }
+        else
+        {
+            RoutesCollection.ItemsSource = _allRoutes
+                .Where(r => r.Category == _selectedCategory)
+                .ToList();
+        }
+    }
+
+    private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not string category)
+            return;
+
+        _selectedCategory = category;
+        ApplyFilter();
+    }
+
+    private async void OnHomeTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//home");
+    }
+
+    private async void OnDiscoverTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//discover");
+    }
+
+    private async void OnEventsTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//events");
+    }
+
+
+-------------------------------------------------------------------------------------------------------
+
+INSERT INTO Routes (Id, Title, Description, Category, Duration, ImageUrl, CostRange) VALUES
+(1, '1 Günde Milano: Temel Duraklar', 'Milano''ya mükemmel bir giriş. Duomo''nun görkemini görün, Galleria''dan geçin ve geleneksel bir aperitivo ile bitirin.', 'Tümü', '8 Saat', 'milano_001.jpg', ''),
+(2, '2 Gün: Merkezin Ötesi', 'Bohem Brera semtini ve Porta Nuova''nın fütüristik mimarisini keşfedin.', 'Tümü', '48 Saat', 'milano_002.jpg', ''),
+(3, 'Fotoğraf Rotası', 'Kraliyet Sarayı''ndan gizli avlulara, en Instagram''lık noktalar.', 'Sanat & Kültür', '4 Saat', 'milano_003.jpg', ''),
+(4, 'Müze Rotası', 'Leonardo''nun Son Akşam Yemeği''nden Fondazione Prada''daki çağdaş eserlere.', 'Sanat & Kültür', '6 Saat', 'milano_004.jpg', '€45 - €75'),
+(5, 'Aile Macerası', 'Parklar, interaktif müzeler ve dondurma.', 'Aile Dostu', '5 Saat', 'milano_005.jpg', '');
+
+-------------------------------------------------------------------------------------------------------
+
+INSERT INTO RouteStops (RouteId, Name, Description, IconGlyph, OrderIndex) VALUES
+(1, 'Duomo di Milano', 'Katedral çatısında gün doğumuyla başlayın.', '', 1),
+(1, 'Galleria Vittorio Emanuele II', 'Mimari ihtişam ve tarihi lüks butikler.', '', 2),
+(1, 'Navigli Bölgesi', 'Kanal kenarında otantik Milano aperitivo.', '', 3),
+(2, 'Brera Semti', 'Sanat galerileri ve dar sokaklarla bohem atmosfer.', '', 1),
+(2, 'Porta Nuova', 'Bosco Verticale ve modern gökdelenler.', '', 2),
+(4, 'Santa Maria delle Grazie', 'Leonardo da Vinci''nin Son Akşam Yemeği freski.', '', 1),
+(4, 'Fondazione Prada', 'Çağdaş sanat ve mimari.', '', 2);
+
+-------------------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.RoutesPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,12"
+              ColumnSpacing="12"
+              BackgroundColor="#F8F9FA">
+
+            <Border Grid.Column="0"
+                    BackgroundColor="#0D47A1"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    VerticalOptions="Center">
+                <Label Text="&#xea3b;"
+                       FontFamily="MaterialSymbols"
+                       FontSize="20"
+                       TextColor="#FFFFFF"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <Label Grid.Column="1"
+                   Text="Milano City Guide"
+                   FontFamily="HankenBold"
+                   FontSize="20"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="2"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="1"
+                    Stroke="#C3C6D4"
+                    StrokeShape="RoundRectangle 18"
+                    VerticalOptions="Center">
+                <Image Source="profile.png" Aspect="AspectFill" />
+            </Border>
+
+        </Grid>
+
+        <!-- ============ HERO + FİLTRE ============ -->
+        <VerticalStackLayout Grid.Row="1" Padding="20,8,20,8" Spacing="16">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="ÖZENLE HAZIRLANMIŞ DENEYİMLER"
+                       FontFamily="Inter"
+                       FontSize="11"
+                       TextColor="#0D47A1"
+                       CharacterSpacing="1.5" />
+                <Label Text="Milano'nun Ruhunu Keşfedin"
+                       FontFamily="HankenBold"
+                       FontSize="28"
+                       TextColor="#191C1D" />
+                <Label Text="Yerel uzmanlar tarafından hazırlanmış rotalarla şehrin gizli hazinelerini ve ikonik simgelerini keşfedin."
+                       FontFamily="HankenRegular"
+                       FontSize="14"
+                       TextColor="#455A64" />
+            </VerticalStackLayout>
+
+            <!-- Kategori filtre çubuğu (ikonlu) -->
+            <CollectionView x:Name="FilterCollection"
+                            SelectionMode="Single"
+                            SelectionChanged="OnFilterSelectionChanged"
+                            HeightRequest="52">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeThickness="1"
+                                Padding="16,8"
+                                StrokeShape="RoundRectangle 22"
+                                VerticalOptions="Center">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#FFFFFF" />
+                                            <Setter Property="Stroke" Value="#C3C6D4" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#0D47A1" />
+                                            <Setter Property="Stroke" Value="#0D47A1" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Label Text="{Binding Icon}"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="16"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding Name}"
+                                       FontFamily="Inter"
+                                       FontSize="13"
+                                       TextColor="#455A64"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+        <!-- ============ ROTA LİSTESİ ============ -->
+        <CollectionView Grid.Row="2"
+                        x:Name="RoutesCollection"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 16">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <Border StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16,16,0,0"
+                                    HeightRequest="160">
+                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                            </Border>
+
+                            <VerticalStackLayout Padding="16" Spacing="6">
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <Border Grid.Column="0"
+                                            BackgroundColor="#0D47A1"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="10,3"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding Category}"
+                                               FontFamily="Inter"
+                                               FontSize="11"
+                                               TextColor="#FFFFFF" />
+                                    </Border>
+                                </Grid>
+
+                                <Label Text="{Binding Title}"
+                                       FontFamily="HankenBold"
+                                       FontSize="18"
+                                       TextColor="#0D47A1" />
+
+                                <Label Text="{Binding Description}"
+                                       FontFamily="HankenRegular"
+                                       FontSize="13"
+                                       TextColor="#434652" />
+
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="&#xe935;"
+                                           FontFamily="MaterialSymbols"
+                                           FontSize="14"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                    <Label Text="{Binding Duration}"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           TextColor="#455A64"
+                                           VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, *, *"
+              BackgroundColor="#FFFFFF"
+              Padding="0,8"
+              HeightRequest="64">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe88a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Ana Sayfa" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe87a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Keşfet" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEventsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe878;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Etkinlikler" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
+
+
+-------------------------------------------------------------------------------------------------------
+
+public RoutesPage()
+{
+    InitializeComponent();
+
+    FilterCollection.ItemsSource = new List<RouteFilterItem>
+    {
+        new RouteFilterItem { Name = "Tümü", Icon = "\ue55b" },              // map
+        new RouteFilterItem { Name = "Aile Dostu", Icon = "\ue84b" },        // family_restroom (yaklaşık)
+        new RouteFilterItem { Name = "Lüks Alışveriş", Icon = "\ue8cc" },    // shopping_bag
+        new RouteFilterItem { Name = "Sanat & Kültür", Icon = "\ue8f8" }     // museum
+    };
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    if (e.CurrentSelection.FirstOrDefault() is not RouteFilterItem selected)
+        return;
+
+    _selectedCategory = selected.Name;
+    ApplyFilter();
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+protected override async void OnAppearing()
+{
+    base.OnAppearing();
+    await LoadRoutesAsync();
+
+    var items = (List<RouteFilterItem>)FilterCollection.ItemsSource;
+    FilterCollection.SelectedItem = items.FirstOrDefault(i => i.Name == "Tümü");
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+public class RouteFilterItem
+{
+    public string Name { get; set; } = string.Empty;
+    public string Icon { get; set; } = string.Empty;
+    public bool IsSelected { get; set; }
+
+    public Color BackgroundColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#FFFFFF");
+    public Color BorderColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#C3C6D4");
+    public Color TextColor => IsSelected ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#191C1D");
+
+    public override string ToString() => Name;
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+<CollectionView x:Name="FilterCollection"
+                SelectionMode="Single"
+                SelectionChanged="OnFilterSelectionChanged"
+                HeightRequest="52">
+    <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+    </CollectionView.ItemsLayout>
+    <CollectionView.ItemTemplate>
+        <DataTemplate>
+            <Border BackgroundColor="{Binding BackgroundColor}"
+                    Stroke="{Binding BorderColor}"
+                    StrokeThickness="1"
+                    Padding="18,10"
+                    StrokeShape="RoundRectangle 24"
+                    VerticalOptions="Center">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="{Binding Icon}"
+                           FontFamily="MaterialSymbols"
+                           FontSize="18"
+                           TextColor="{Binding TextColor}"
+                           VerticalOptions="Center" />
+                    <Label Text="{Binding Name}"
+                           FontFamily="HankenBold"
+                           FontSize="16"
+                           TextColor="{Binding TextColor}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+            </Border>
+        </DataTemplate>
+    </CollectionView.ItemTemplate>
+</CollectionView>
+
+
+-------------------------------------------------------------------------------------------------------
+
+public RoutesPage()
+{
+    InitializeComponent();
+
+    _filterItems = new List<RouteFilterItem>
+    {
+        new RouteFilterItem { Name = "Tümü", Icon = "\ue55b", IsSelected = true },
+        new RouteFilterItem { Name = "Aile Dostu", Icon = "\uf00c" },
+        new RouteFilterItem { Name = "Lüks Alışveriş", Icon = "\ue8cc" },
+        new RouteFilterItem { Name = "Sanat & Kültür", Icon = "\ue8f8" }
+    };
+
+    FilterCollection.ItemsSource = _filterItems;
+}
+
+
+-------------------------------------------------------------------------------------------------------
+
+protected override async void OnAppearing()
+{
+    base.OnAppearing();
+    await LoadRoutesAsync();
+    FilterCollection.SelectedItem = _filterItems.First(i => i.Name == "Tümü");
+}
+
+private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    if (e.CurrentSelection.FirstOrDefault() is not RouteFilterItem selected)
+        return;
+
+    // Tüm öğelerin seçim durumunu güncelle
+    foreach (var item in _filterItems)
+    {
+        item.IsSelected = (item == selected);
+    }
+
+    // Listeyi yeniden ata ki renkler tazelensin
+    FilterCollection.ItemsSource = null;
+    FilterCollection.ItemsSource = _filterItems;
+    FilterCollection.SelectedItem = selected;
+
+    _selectedCategory = selected.Name;
+    ApplyFilter();
+}
+
+-------------------------------------------------------------------------------------------------------
+
+<Border.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnRouteTapped" />
+    </Border.GestureRecognizers>
+
+
+-------------------------------------------------------------------------------------------------------
+
+using CityGuide.Maui.Services;
+
+namespace CityGuide.Maui.Views;
+
+
+[QueryProperty(nameof(RouteId), "id")]
+public partial class RouteDetailPage : ContentPage
+{
+    private readonly AppDatabase _db = new AppDatabase();
+    public string RouteId { get; set; } = string.Empty;
+    public RouteDetailPage()
+	{
+		InitializeComponent();
+	}
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (int.TryParse(RouteId, out int routeId))
+        {
+            await LoadRouteDetailAsync(routeId);
+        }
+    }
+
+    private async Task LoadRouteDetailAsync(int routeId)
+    {
+        // Şimdilik geçici doğrulama — sonraki adımda gerçek XAML'e bağlayacağız
+        var stops = await _db.GetRouteStopsAsync(routeId);
+        await DisplayAlert("Teşhis", $"Rota Id: {routeId}, Durak sayısı: {stops.Count}", "Tamam");
+    }
+}
+
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------

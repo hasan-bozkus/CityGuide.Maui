@@ -535,7 +535,7 @@
 
         <!-- === ALT NAV BAR === -->
         <Grid Grid.Row="2"
-      ColumnDefinitions="*, *, *"
+      ColumnDefinitions="*, *, *, *"
       BackgroundColor="#FFFFFF"
       Padding="0,8"
       HeightRequest="64">
@@ -586,6 +586,15 @@
                FontSize="11"
                TextColor="#737783"
                HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Profil (yeni) -->
+            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe7fd;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Profil" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
             </VerticalStackLayout>
 
         </Grid>

@@ -25,6 +25,9 @@ namespace CityGuide.Maui.Services
             await _connection.CreateTableAsync<User>();
             await _connection.CreateTableAsync<Favorite>();
             await _connection.CreateTableAsync<Place>();
+            await _connection.CreateTableAsync<TransportationLine>();
+            await _connection.CreateTableAsync<Route>();
+            await _connection.CreateTableAsync<RouteStop>();
         }
 
         // --- Okuma metotları ---
@@ -47,10 +50,10 @@ namespace CityGuide.Maui.Services
             var events = await _connection.Table<Event>().ToListAsync();
             var categories = await _connection.Table<Category>().ToListAsync();
 
-            foreach(var item in events)
+            foreach (var item in events)
             {
                 var matchingCategory = categories.FirstOrDefault(c => c.CategoryId == item.CategoryId);
-                if(matchingCategory is not null)
+                if (matchingCategory is not null)
                 {
                     item.CategoryName = matchingCategory.CategoryName;
                 }
@@ -159,5 +162,38 @@ namespace CityGuide.Maui.Services
 
             return favoritePlaces;
         }
+
+        //ulaşım kartları
+        public async Task<List<TransportationLine>> GetTransportLinesAsync()
+        {
+            await InitAsync();
+            return await _connection.Table<TransportationLine>().ToListAsync();
+        }
+
+        public async Task<List<TransportationLine>> GetTransportationLinesByTypeAsync(string type)
+        {
+            await InitAsync();
+            return await _connection.Table<TransportationLine>().Where(x => x.Type == type).ToListAsync();
+        }
+
+        // --- Rotalar ---
+
+        // Tüm rotaları getirir (durakları olmadan)
+        public async Task<List<Route>> GetRoutesAsync()
+        {
+            await InitAsync();
+            return await _connection.Table<Route>().ToListAsync();
+        }
+
+        // Belirli bir rotanın duraklarını, sıralı şekilde getirir
+        public async Task<List<RouteStop>> GetRouteStopsAsync(int routeId)
+        {
+            await InitAsync();
+            return await _connection.Table<RouteStop>()
+                                  .Where(s => s.RouteId == routeId)
+                                  .OrderBy(s => s.OrderIndex)
+                                  .ToListAsync();
+        }
+
     }
 }
