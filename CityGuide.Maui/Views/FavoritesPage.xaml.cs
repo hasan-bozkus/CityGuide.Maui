@@ -8,35 +8,37 @@ public partial class FavoritesPage : ContentPage
     private readonly AppDatabase _appDatabase = new AppDatabase();
     private int CurrentUserId => CurrentSession.UserId;
 
-    // Tüm mekanları bellekte tut (filtreleme için)
     private List<Place> _allPlaces = new List<Place>();
+    private List<PlaceFilterItem> _filterItems = new List<PlaceFilterItem>();
     private string _selectedCategory = "Tümü";
 
     public FavoritesPage()
     {
         InitializeComponent();
 
-        // Filtre haplarını doldur
-        FilterCollection.ItemsSource = new List<string>
+        _filterItems = new List<PlaceFilterItem>
         {
-            "Tümü", "Restoran", "Müze", "Rota", "Kafe"
+            new PlaceFilterItem { Name = "Tümü", IsSelected = true },
+            new PlaceFilterItem { Name = "Restoran" },
+            new PlaceFilterItem { Name = "Müze" },
+            new PlaceFilterItem { Name = "Rota" },
+            new PlaceFilterItem { Name = "Kafe" }
         };
+
+        FilterCollection.ItemsSource = _filterItems;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         await LoadPlacesAsync();
-
-        // Başlangıçta "Tümü" seçili
-        FilterCollection.SelectedItem = "Tümü";
+        FilterCollection.SelectedItem = _filterItems.First(i => i.Name == "Tümü");
     }
 
     private async Task LoadPlacesAsync()
     {
         var places = await _appDatabase.GetPlacesAsync();
 
-        // Her mekan için favori mi diye işaretle
         foreach (var place in places)
         {
             place.IsFavorite = await _appDatabase.IsFavoriteAsync(CurrentUserId, place.PlaceId);
@@ -46,7 +48,6 @@ public partial class FavoritesPage : ContentPage
         ApplyFilter();
     }
 
-    // Seçili kategoriye göre listeyi süz
     private void ApplyFilter()
     {
         if (_selectedCategory == "Tümü")
@@ -63,14 +64,22 @@ public partial class FavoritesPage : ContentPage
 
     private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not string category)
+        if (e.CurrentSelection.FirstOrDefault() is not PlaceFilterItem selected)
             return;
 
-        _selectedCategory = category;
+        foreach (var item in _filterItems)
+        {
+            item.IsSelected = (item == selected);
+        }
+
+        FilterCollection.ItemsSource = null;
+        FilterCollection.ItemsSource = _filterItems;
+        FilterCollection.SelectedItem = selected;
+
+        _selectedCategory = selected.Name;
         ApplyFilter();
     }
 
-    // Kalbe tıklanınca
     private async void OnFavoriteTapped(object sender, TappedEventArgs e)
     {
         if (sender is not Label label) return;
@@ -82,5 +91,28 @@ public partial class FavoritesPage : ContentPage
             await _appDatabase.AddFavoriteAsync(CurrentUserId, place.PlaceId);
 
         await LoadPlacesAsync();
+    }
+
+    private async void OnDetailsClicked(object sender, EventArgs e)
+    {
+        if (sender is not Button button) return;
+        if (button.BindingContext is not Place place) return;
+
+        await Shell.Current.GoToAsync($"placedetail?id={place.PlaceId}");
+    }
+
+    private async void OnHomeTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//home");
+    }
+
+    private async void OnEventsTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//events");
+    }
+
+    private async void OnProfileTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("profile");
     }
 }

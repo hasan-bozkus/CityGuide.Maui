@@ -24,5 +24,25 @@ namespace CityGuide.Maui.Models
 
         [Ignore]
         public string? CategoryName { get; set; }
+
+        [Ignore]
+        public Color BadgeColor => CategoryName switch
+        {
+            "Konserler" => Color.FromArgb("#E1BEE7"),
+            "Tiyatro" => Color.FromArgb("#FFDBCD"),
+            "Sergi" => Color.FromArgb("#D9E2FF"),
+            "Futbol Maçı" => Color.FromArgb("#C8E6C9"),
+            _ => Color.FromArgb("#EDEEEF")
+        };
+
+        [Ignore]
+        public Color BadgeTextColor => CategoryName switch
+        {
+            "Konserler" => Color.FromArgb("#4A148C"),
+            "Tiyatro" => Color.FromArgb("#7D2D00"),
+            "Sergi" => Color.FromArgb("#0D47A1"),
+            "Futbol Maçı" => Color.FromArgb("#1B5E20"),
+            _ => Color.FromArgb("#455A64")
+        };
     }
 }

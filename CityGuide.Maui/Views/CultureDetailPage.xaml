@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CultureDetailPage"
+             Title="CultureDetailPage"
+             BackgroundColor="#F5F6F8"
+             Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Üst görsel + gradyan + bilgiler -->
+            <Border StrokeThickness="0" HeightRequest="260">
+                <Grid>
+                    <Image x:Name="EventImage"
+                           Aspect="AspectFill"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Fill" />
+
+                    <BoxView>
+                        <BoxView.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#00000000" Offset="0.3" />
+                                <GradientStop Color="#CC000000" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </BoxView.Background>
+                    </BoxView>
+
+                    <VerticalStackLayout VerticalOptions="End" Padding="20" Spacing="6">
+                        <HorizontalStackLayout Spacing="8">
+                            <Border x:Name="CategoryBadge"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 10"
+                                    Padding="10,3">
+                                <Label x:Name="CategoryLabel"
+                                       FontFamily="Inter"
+                                       FontSize="11" />
+                            </Border>
+                            <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                <Label Text="&#xe935;"
+                                       FontFamily="MaterialSymbols"
+                                       FontSize="14"
+                                       TextColor="#FFFFFF"
+                                       VerticalOptions="Center" />
+                                <Label x:Name="DateLabel"
+                                       FontFamily="Inter"
+                                       FontSize="13"
+                                       TextColor="#FFFFFF"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <Label x:Name="TitleLabel"
+                               FontFamily="HankenBold"
+                               FontSize="26"
+                               TextColor="#FFFFFF" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Konum + Puan bilgi kartları -->
+            <Grid Padding="20,16,20,8" ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                <Border Grid.Column="0"
+                        BackgroundColor="#FFFFFF"
+                        StrokeThickness="1"
+                        Stroke="#EDEEEF"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="14,12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="&#xe0c8;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="18"
+                               TextColor="#0D47A1" />
+                        <Label Text="Konum"
+                               FontFamily="Inter"
+                               FontSize="11"
+                               TextColor="#8A8F99" />
+                        <Label x:Name="LocationLabel"
+                               FontFamily="HankenBold"
+                               FontSize="14"
+                               TextColor="#191C1D"
+                               LineBreakMode="TailTruncation" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="#FFFFFF"
+                        StrokeThickness="1"
+                        Stroke="#EDEEEF"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="14,12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="&#xe838;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="18"
+                               TextColor="#D4AF37" />
+                        <Label Text="Puan"
+                               FontFamily="Inter"
+                               FontSize="11"
+                               TextColor="#8A8F99" />
+                        <Label x:Name="RatingLabel"
+                               FontFamily="HankenBold"
+                               FontSize="14"
+                               TextColor="#191C1D" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- ETKİNLİK DETAYLARI -->
+            <VerticalStackLayout Padding="20,16,20,24" Spacing="16">
+
+                <Label Text="ETKİNLİK DETAYLARI"
+                       FontFamily="Inter"
+                       FontSize="13"
+                       TextColor="#0D47A1"
+                       CharacterSpacing="1.5" />
+
+                <Grid ColumnDefinitions="Auto, *" Padding="0,0,0,4">
+                    <Border BackgroundColor="#D9E2FF"
+                            Grid.Column="0"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 18">
+                        <Label Text="&#xe935;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="18"
+                               TextColor="#0D47A1"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Padding="12,0,0,0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Tarih"
+                               FontFamily="HankenBold"
+                               FontSize="16"
+                               TextColor="#191C1D" />
+                        <Label x:Name="DateDetailLabel"
+                               FontFamily="HankenRegular"
+                               FontSize="13"
+                               TextColor="#455A64" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto, *" Padding="0,0,0,4">
+                    <Border BackgroundColor="#D9E2FF"
+                            Grid.Column="0"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 18">
+                        <Label Text="&#xe0c8;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="18"
+                               TextColor="#0D47A1"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Padding="12,0,0,0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Mekan"
+                               FontFamily="HankenBold"
+                               FontSize="16"
+                               TextColor="#191C1D" />
+                        <Label x:Name="LocationDetailLabel"
+                               FontFamily="HankenRegular"
+                               FontSize="13"
+                               TextColor="#455A64" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto, *" Padding="0,0,0,4">
+                    <Border BackgroundColor="#D9E2FF"
+                            Grid.Column="0"
+                            WidthRequest="36"
+                            HeightRequest="36"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 18">
+                        <Label Text="&#xe838;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="18"
+                               TextColor="#0D47A1"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Padding="12,0,0,0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Kategori"
+                               FontFamily="HankenBold"
+                               FontSize="16"
+                               TextColor="#191C1D" />
+                        <Label x:Name="CategoryDetailLabel"
+                               FontFamily="HankenRegular"
+                               FontSize="13"
+                               TextColor="#455A64" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Detaylar / Bilet butonu -->
+                <Button x:Name="ActionButton"
+                        Text="Detayları Gör"
+                        FontFamily="Inter"
+                        FontSize="15"
+                        TextColor="#FFFFFF"
+                        BackgroundColor="#0D47A1"
+                        CornerRadius="12"
+                        HeightRequest="50"
+                        Margin="0,8,0,0"
+                        Clicked="OnActionButtonClicked" />
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

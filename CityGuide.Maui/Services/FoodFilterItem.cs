@@ -1,29 +1,18 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CityGuide.Maui.Models
+namespace CityGuide.Maui.Services
 {
-    [Table("Categories")]
-    public class Category
+    public class FoodFilterItem
     {
-        [PrimaryKey, AutoIncrement]
-        public int CategoryId { get; set; }
-
-        [NotNull]
-        public string CategoryName { get; set; }
-
-        [Ignore]
+        public string Name { get; set; } = string.Empty;
         public bool IsSelected { get; set; }
 
-        [Ignore]
         public Color BackgroundColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#FFFFFF");
-
-        [Ignore]
         public Color BorderColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#C3C6D4");
-
-        [Ignore]
         public Color TextColor => IsSelected ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#191C1D");
+
+        public override string ToString() => Name;
     }
 }

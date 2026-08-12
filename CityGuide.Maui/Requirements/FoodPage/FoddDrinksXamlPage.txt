@@ -1,0 +1,436 @@
+﻿﻿[Table("FoodPlaces")]
+    public class FoodPlace
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+        [NotNull]
+        public string Name { get; set; } = string.Empty;
+
+        public string District { get; set; } = string.Empty;
+
+        [NotNull]
+        public string CuisineType { get; set; } = string.Empty;   // "Pasta", "Pizza", "Fine Dining", "Aperitivo", "Gelato"
+
+        public string PriceRange { get; set; } = string.Empty;    // "€€€€"
+
+        public double Rating { get; set; }
+
+        public string ImageUrl { get; set; } = string.Empty;
+
+        // Veritabanı sütunu değil — favori durumu için (Yol B, Favorites'teki gibi)
+        [Ignore]
+        public bool IsFavorite { get; set; }
+
+        [Ignore]
+        public string HeartIcon => IsFavorite ? "\ue87d" : "\ue87e";
+
+        [Ignore]
+        public string HeartColor => IsFavorite ? "#BA1A1A" : "#FFFFFF";
+    }
+
+---------------------------------------------------------------------------------------------------------------------
+
+[Table("FoodPlaces")]
+    public class FoodPlace
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+        [NotNull]
+        public string Name { get; set; } = string.Empty;
+
+        public string District { get; set; } = string.Empty;
+
+        [NotNull]
+        public string CuisineType { get; set; } = string.Empty;   // "Pasta", "Pizza", "Fine Dining", "Aperitivo", "Gelato"
+
+        public string PriceRange { get; set; } = string.Empty;    // "€€€€"
+
+        public double Rating { get; set; }
+
+        public string ImageUrl { get; set; } = string.Empty;
+    }
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.FoodDrinksPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ============ ÜST APP BAR ============ -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              Padding="20,12"
+              ColumnSpacing="12"
+              BackgroundColor="#F8F9FA">
+
+            <Label Grid.Column="0"
+                   Text="&#xe5c4;"
+                   FontFamily="MaterialSymbols"
+                   FontSize="24"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Column="1"
+                   Text="Yeme &amp; İçme"
+                   FontFamily="HankenBold"
+                   FontSize="20"
+                   TextColor="#0D47A1"
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="2"
+                    WidthRequest="36"
+                    HeightRequest="36"
+                    StrokeThickness="1"
+                    Stroke="#C3C6D4"
+                    StrokeShape="RoundRectangle 18"
+                    VerticalOptions="Center">
+                <Image Source="profile.png" Aspect="AspectFill" />
+            </Border>
+
+        </Grid>
+
+        <!-- ============ ARAMA + FİLTRE ============ -->
+        <VerticalStackLayout Grid.Row="1" Padding="20,8,20,8" Spacing="14">
+
+            <Border Stroke="#C3C6D4"
+                    StrokeThickness="1"
+                    Padding="16,0"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#FFFFFF">
+                <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                    <Label Grid.Column="0"
+                           Text="&#xe8b6;"
+                           FontFamily="MaterialSymbols"
+                           FontSize="20"
+                           TextColor="#737783"
+                           VerticalOptions="Center" />
+                    <Entry Grid.Column="1"
+                           Placeholder="Restoran, bar ara..."
+                           FontFamily="HankenRegular"
+                           FontSize="16"
+                           HeightRequest="48"
+                           BackgroundColor="Transparent" />
+                </Grid>
+            </Border>
+
+            <CollectionView x:Name="FilterCollection"
+                            SelectionMode="Single"
+                            SelectionChanged="OnFilterSelectionChanged"
+                            HeightRequest="44">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="{Binding BackgroundColor}"
+                                Stroke="{Binding BorderColor}"
+                                StrokeThickness="1"
+                                Padding="16,8"
+                                StrokeShape="RoundRectangle 20"
+                                VerticalOptions="Center">
+                            <Label Text="{Binding Name}"
+                                   FontFamily="HankenBold"
+                                   FontSize="14"
+                                   TextColor="{Binding TextColor}"
+                                   VerticalOptions="Center" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+        <!-- ============ RESTORAN LİSTESİ ============ -->
+        <CollectionView Grid.Row="2"
+                        x:Name="FoodPlacesCollection"
+                        Margin="20,0,20,8">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#FFFFFF"
+                            Stroke="#C3C6D4"
+                            StrokeThickness="1"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 16">
+
+                        <VerticalStackLayout Spacing="0">
+
+                            <Border StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 16,16,0,0"
+                                    HeightRequest="180">
+                                <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                            </Border>
+
+                            <VerticalStackLayout Padding="16" Spacing="6">
+
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label Text="{Binding District}"
+                                               FontFamily="Inter"
+                                               FontSize="11"
+                                               TextColor="#455A64"
+                                               CharacterSpacing="1" />
+                                        <Label Text="{Binding Name}"
+                                               FontFamily="HankenBold"
+                                               FontSize="18"
+                                               TextColor="#0D47A1" />
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="1"
+                                            BackgroundColor="#FEF6D6"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 8"
+                                            Padding="8,4"
+                                            VerticalOptions="Start">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label Text="&#xe838;"
+                                                   FontFamily="MaterialSymbols"
+                                                   FontSize="14"
+                                                   TextColor="#D4AF37"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Rating}"
+                                                   FontFamily="Inter"
+                                                   FontSize="13"
+                                                   TextColor="#745C00"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </Grid>
+
+                                <HorizontalStackLayout Spacing="16" Margin="0,6,0,0">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#xe8b6;"
+                                               FontFamily="MaterialSymbols"
+                                               FontSize="14"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding PriceRange}"
+                                               FontFamily="Inter"
+                                               FontSize="13"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#xe56c;"
+                                               FontFamily="MaterialSymbols"
+                                               FontSize="14"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding CuisineType}"
+                                               FontFamily="Inter"
+                                               FontSize="13"
+                                               TextColor="#455A64"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </HorizontalStackLayout>
+
+                                <Button Text="Detayları Gör"
+                                        Clicked="OnViewDetailsClicked"
+                                        BackgroundColor="#0D47A1"
+                                        TextColor="#FFFFFF"
+                                        FontFamily="HankenBold"
+                                        FontSize="14"
+                                        HeightRequest="44"
+                                        CornerRadius="8"
+                                        Margin="0,8,0,0" />
+
+                            </VerticalStackLayout>
+
+                        </VerticalStackLayout>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ============ ALT NAV BAR ============ -->
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*, *, *, *"
+              BackgroundColor="#FFFFFF"
+              Padding="0,8"
+              HeightRequest="64">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe88a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Ana Sayfa" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe87a;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Keşfet" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnEventsTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe878;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Etkinlikler" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+                <Label Text="&#xe7fd;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+                <Label Text="Profil" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+public class FoodFilterItem
+{
+    public string Name { get; set; } = string.Empty;
+    public bool IsSelected { get; set; }
+
+    public Color BackgroundColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#FFFFFF");
+    public Color BorderColor => IsSelected ? Color.FromArgb("#0D47A1") : Color.FromArgb("#C3C6D4");
+    public Color TextColor => IsSelected ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#191C1D");
+
+    public override string ToString() => Name;
+}
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+ private readonly AppDatabase _db = new AppDatabase();
+
+    private List<FoodPlace> _allPlaces = new List<FoodPlace>();
+    private List<FoodFilterItem> _filterItems = new List<FoodFilterItem>();
+    private string _selectedFilter = "Tümü";
+
+    public FoodDrinksPage()
+    {
+        InitializeComponent();
+
+        _filterItems = new List<FoodFilterItem>
+        {
+            new FoodFilterItem { Name = "Tümü", IsSelected = true },
+            new FoodFilterItem { Name = "Pasta" },
+            new FoodFilterItem { Name = "Pizza" },
+            new FoodFilterItem { Name = "Fine Dining" },
+            new FoodFilterItem { Name = "Aperitivo" },
+            new FoodFilterItem { Name = "Gelato" }
+        };
+
+        FilterCollection.ItemsSource = _filterItems;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadFoodPlacesAsync();
+        FilterCollection.SelectedItem = _filterItems.First(i => i.Name == "Tümü");
+    }
+
+    private async Task LoadFoodPlacesAsync()
+    {
+        _allPlaces = await _db.GetFoodPlacesAsync();
+        ApplyFilter();
+    }
+
+    private void ApplyFilter()
+    {
+        if (_selectedFilter == "Tümü")
+        {
+            FoodPlacesCollection.ItemsSource = _allPlaces;
+        }
+        else
+        {
+            FoodPlacesCollection.ItemsSource = _allPlaces
+                .Where(p => p.CuisineType == _selectedFilter)
+                .ToList();
+        }
+    }
+
+    private void OnFilterSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not FoodFilterItem selected)
+            return;
+
+        foreach (var item in _filterItems)
+        {
+            item.IsSelected = (item == selected);
+        }
+
+        FilterCollection.ItemsSource = null;
+        FilterCollection.ItemsSource = _filterItems;
+        FilterCollection.SelectedItem = selected;
+
+        _selectedFilter = selected.Name;
+        ApplyFilter();
+    }
+
+    private async void OnViewDetailsClicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Detaylar", "Detay sayfası yakında eklenecek.", "Tamam");
+    }
+
+    private async void OnBackTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async void OnHomeTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//home");
+    }
+
+    private async void OnDiscoverTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//discover");
+    }
+
+    private async void OnEventsTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("//events");
+    }
+
+    private async void OnProfileTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("profile");
+    }
+
+---------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO FoodPlaces (Name, District, CuisineType, PriceRange, Rating, ImageUrl) VALUES
+('Cracco in Galleria', 'Brera District', 'Fine Dining', '€€€€', 4.9, 'milano_001.jpg'),
+('Berberè Navigli', 'Navigli', 'Pizza', '€€', 4.7, 'milano_002.jpg'),
+('Terrazza Aperol', 'Centro Storico', 'Aperitivo', '€€€', 4.5, 'milano_003.jpg'),
+('Trattoria Masuelli', 'Porta Romana', 'Pasta', '€€', 4.5, 'milano_004.jpg'),
+('Gelateria Marghera', 'Wagner', 'Gelato', '€', 4.7, 'milano_005.jpg'),
+('Ristorante Berton', 'Porta Nuova', 'Fine Dining', '€€€€', 4.7, 'milano_006.jpg'),
+('Pave Milano', 'Porta Venezia', 'Gelato', '€€', 4.5, 'milano_007.jpg');
+
+
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------

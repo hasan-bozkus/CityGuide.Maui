@@ -28,6 +28,8 @@ namespace CityGuide.Maui.Services
             await _connection.CreateTableAsync<TransportationLine>();
             await _connection.CreateTableAsync<Route>();
             await _connection.CreateTableAsync<RouteStop>();
+            await _connection.CreateTableAsync<FoodPlace>();
+            await _connection.CreateTableAsync<PlaceImage>();
         }
 
         // --- Okuma metotları ---
@@ -195,5 +197,22 @@ namespace CityGuide.Maui.Services
                                   .ToListAsync();
         }
 
+        //food and drink
+        public async Task<List<FoodPlace>> GetFoodPlacesAsync()
+        {
+            await InitAsync();
+            return await _connection.Table<FoodPlace>().ToListAsync();
+
+        }
+
+        //belirli bir mekanın galeri görsellerini, sıralı şekilde getirir
+        public async Task<List<PlaceImage>> GetPlaceImagesAsync(int id)
+        {
+            await InitAsync();
+            return await _connection.Table<PlaceImage>()
+                                  .Where(i => i.PlaceId == id)
+                                  .OrderBy(i => i.OrderIndex)
+                                  .ToListAsync();
+        }
     }
 }

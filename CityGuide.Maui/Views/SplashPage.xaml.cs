@@ -31,7 +31,7 @@ public partial class SplashPage : ContentPage
 
     private async void NavigateAfterDelay()
     {
-        await Task.Delay(10000);  // 10 saniye
+        await Task.Delay(1000);  // 10 saniye
 
         if (!_isRunning) return;  // Sayfa zaten kapandıysa geçme
 

@@ -167,6 +167,9 @@
 
                         <!-- Yeme-İçme -->
                         <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="6">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFoodDrinksTapped" />
+                            </VerticalStackLayout.GestureRecognizers>
                             <Border BackgroundColor="#FFF3C4"
                                     WidthRequest="56" HeightRequest="56"
                                     StrokeThickness="0"
@@ -211,6 +214,9 @@
 
                         <!-- Kültür & Sanat -->
                         <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="6">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCulturesTapped" />
+                            </VerticalStackLayout.GestureRecognizers>
                             <Border BackgroundColor="#FFDBCD"
                                     WidthRequest="56" HeightRequest="56"
                                     StrokeThickness="0"
@@ -278,7 +284,7 @@
                         <!-- Etkinlikler -->
                         <VerticalStackLayout Grid.Row="1" Grid.Column="2" Spacing="6">
                             <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnEventsClicked" />
+                                <TapGestureRecognizer Tapped="OnFavoritesClicked" />
                             </VerticalStackLayout.GestureRecognizers>
                             <Border BackgroundColor="#E1BEE7"
                                     WidthRequest="56" HeightRequest="56"
@@ -292,7 +298,7 @@
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center" />
                             </Border>
-                            <Label Text="Etkinlikler"
+                            <Label Text="Favoriler"
                                    FontFamily="Inter"
                                    FontSize="12"
                                    TextColor="#191C1D"
