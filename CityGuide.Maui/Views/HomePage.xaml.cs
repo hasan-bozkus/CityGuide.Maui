@@ -54,4 +54,9 @@ public partial class HomePage : ContentPage
     {
         await Shell.Current.GoToAsync("profile");
     }
+
+    private async void OnDashboardClicked(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync("dashboard");
+    }
 }

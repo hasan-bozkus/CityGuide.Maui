@@ -17,6 +17,7 @@ namespace CityGuide.Maui
             Routing.RegisterRoute("culturedetail", typeof(CultureDetailPage));
             Routing.RegisterRoute("favorites", typeof(FavoritesPage));
             Routing.RegisterRoute("placedetail", typeof(PlaceDetailPage));
+            Routing.RegisterRoute("dashboard", typeof(DashboardPage));
         }
     }
 }

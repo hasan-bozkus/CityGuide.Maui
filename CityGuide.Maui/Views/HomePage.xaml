@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CityGuide.Maui.Views.HomePage"
-             Title="HomePage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#F8F9FA">
 
@@ -31,7 +30,7 @@
             </Border>
 
             <Label Grid.Column="1"
-                   Text="Mardin Şehir Rehberi"
+                   Text="Milano Şehir Rehberi"
                    FontFamily="HankenBold"
                    FontSize="20"
                    TextColor="#0D47A1"
@@ -58,11 +57,11 @@
                 <VerticalStackLayout Spacing="16">
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Hoşgeldiniz! 👋"
+                        <Label Text="Buongiorno! 👋"
                                FontFamily="HankenBold"
                                FontSize="32"
                                TextColor="#0D47A1" />
-                        <Label Text="Mardin'in kalbini keşfetmeye hazır mısınız?"
+                        <Label Text="Lombardiya'nın kalbini keşfetmeye hazır mısınız?"
                                FontFamily="HankenRegular"
                                FontSize="18"
                                TextColor="#455A64" />
@@ -91,13 +90,51 @@
 
                 </VerticalStackLayout>
 
+                <!-- === PANEL KISAYOLU === -->
+                <Border BackgroundColor="#EDE7F6" Stroke="#D1C4E9" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDashboardClicked" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+                        <Border Grid.Column="0"
+                BackgroundColor="#D1C4E9"
+                WidthRequest="40" HeightRequest="40"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20">
+                            <Label Text="&#xe94e;"
+                   FontFamily="MaterialSymbols"
+                   FontSize="20"
+                   TextColor="#4A148C"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0" VerticalOptions="Center">
+                            <Label Text="Panel"
+                   FontFamily="HankenBold"
+                   FontSize="15"
+                   TextColor="#4A148C" />
+                            <Label Text="Döviz, hava durumu ve daha fazlası"
+                   FontFamily="Inter"
+                   FontSize="12"
+                   TextColor="#4A148C" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="2"
+               Text="&#xe5cc;"
+               FontFamily="MaterialSymbols"
+               FontSize="20"
+               TextColor="#4A148C"
+               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+
                 <!-- === ÖNE ÇIKAN (HERO) === -->
                 <Border StrokeThickness="0"
                         StrokeShape="RoundRectangle 16"
                         HeightRequest="380">
 
                     <Grid>
-                        <Image Source="hatuniyemedresesi.png"
+                        <Image Source="milano_catedral.jpg"
                                Aspect="AspectFill"
                                HorizontalOptions="Fill"
                                VerticalOptions="Fill" />
@@ -120,11 +157,11 @@
                                    FontSize="12"
                                    TextColor="#D4AF37"
                                    CharacterSpacing="2" />
-                            <Label Text="Hatuniye Medresesi"
+                            <Label Text="Milano Katedrali"
                                    FontFamily="HankenBold"
                                    FontSize="28"
                                    TextColor="#FFFFFF" />
-                            <Label Text="Asırların gölgesinde yükselen taş işçiliğinin büyüleyici zarafetini keşfedin; Hatuniye Medresesi’nin efsanevi taç kapısında zamanın durduğuna şahit olun."
+                            <Label Text="Gün batımında çatı teraslarından mimari şaheseri deneyimleyin."
                                    FontFamily="HankenRegular"
                                    FontSize="14"
                                    TextColor="#E6FFFFFF" />
@@ -411,7 +448,7 @@
             StrokeShape="RoundRectangle 16"
             HeightRequest="240">
                         <Grid>
-                            <Image Source="https://beypazari.bel.tr/upload/icerikler/1663137145.jpg"
+                            <Image Source="milano_003.jpg"
                    Aspect="AspectFill"
                    HorizontalOptions="Fill"
                    VerticalOptions="Fill" />
@@ -424,11 +461,11 @@
                                 </BoxView.Background>
                             </BoxView>
                             <VerticalStackLayout VerticalOptions="End" Padding="16" Spacing="4">
-                                <Label Text="Telkari Gümüş İşlemeciliği"
+                                <Label Text="Aperitivo Sanatı"
                        FontFamily="HankenBold"
                        FontSize="20"
                        TextColor="#FFFFFF" />
-                                <Label Text="Gümüş tellerinin ince bir sabırla bükülerek işlendiği, özellikle Midyat ve merkezde yaygın olan eşsiz bir kuyumculuk sanatı."
+                                <Label Text="Brera'nın en iyi gizli barlarını keşfedin."
                        FontFamily="HankenRegular"
                        FontSize="14"
                        TextColor="#E6FFFFFF" />

@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CityGuide.Maui.Views.SplashPage"
-             Title="SplashPage"
              BackgroundColor="#000000"
              Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
@@ -51,7 +50,7 @@
 
             <!-- Başlık -->
             <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                <Label Text="MARDİN"
+                <Label Text="MILANO"
                        FontFamily="HankenBold"
                        FontSize="40"
                        TextColor="#FFFFFF"

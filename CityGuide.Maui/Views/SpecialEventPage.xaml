@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CityGuide.Maui.Views.SpecialEventPage"
-             Title="SpecialEventPage"
              BackgroundColor="#F8F9FA">
 
     <Grid RowDefinitions="Auto, *">
@@ -13,7 +12,7 @@
                    FontFamily="HankenBold"
                    FontSize="28"
                    TextColor="#0D47A1" />
-            <Label Text="Mardin'in öne çıkan deneyimleri"
+            <Label Text="Milano'nun öne çıkan deneyimleri"
                    FontFamily="HankenRegular"
                    FontSize="16"
                    TextColor="#455A64" />

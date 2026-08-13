@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CityGuide.Maui.Views.WelcomePage"
-             Title="WelcomePage">
+             x:Class="CityGuide.Maui.Views.WelcomePage">
 
     <Grid RowDefinitions="Auto, *">
 
@@ -15,7 +14,7 @@
 
             <!-- Kolon 0: Marka adı (sola yaslı) -->
             <Label Grid.Column="0"
-                   Text="Mardin Şehir Rehberi"
+                   Text="Milano Şehir Rehberi"
                    TextColor="#0D47A1"
                    FontSize="22"
                    FontAttributes="Bold"
@@ -38,7 +37,7 @@
                 <!-- HERO -->
                 <Grid HeightRequest="400">
 
-                    <Image Source="https://lh3.googleusercontent.com/aida-public/AB6AXuDdGAjYnjLxUGzkDZaushG7RMQoky2YwYhCyFKa42KNRmE0KM9HbuDzI8RwjnDuytaD3pmkgN3MeMFqEY9jZgKxfm3aeSxYGU1tzbYxVQVk2C5RLn2WQykCHObUm_6mtqQjrujEEvDpxCVXzBRlfEASoLEhGqevucVwBpKoHYph_EUT78uLRj_5nMYtldjKwOCD2D9CZJAjohb65hkTXeO2rTdtuQH0vO8hFndo1Pfj5PqbB5Oevih-eQ"
+                    <Image Source="hero_milano.png"
            Aspect="AspectFill" />
 
                     <Border>
@@ -61,14 +60,14 @@
             HorizontalOptions="Start"
             StrokeThickness="0"
             StrokeShape="RoundRectangle 20">
-                            <Label Text="Mardin'e Hoşgelidiniz!"
+                            <Label Text="Milano'ya Hoşgelidiniz!"
                TextColor="#0D47A1"
                FontSize="12"
                FontAttributes="Bold" />
                         </Border>
 
                         <!-- Başlık -->
-                        <Label Text="Mardin'in antik tarihini keşfedin."
+                        <Label Text="Lombardiya'nın zarif kalbini keşfedin."
            TextColor="Black"
            FontSize="28"
            FontAttributes="Bold" />
@@ -80,7 +79,7 @@
                 <!-- CONTENT -->
                 <VerticalStackLayout Padding="20,24" Spacing="16">
 
-                    <Label Text="Hatuniye Medresesi (Sitti Radviyye Medresesi). İçinde Hz. Muhammed (SAV)'e ait olduğu kabul edilen bir kadem-i şerif (ayak izi) barındıran, Artuklu döneminden kalma tarihi medrese."
+                    <Label Text="Duomo'nun gotik ihtişamından Brera'nın gizli avlularına kadar Milano'yu gerçek bir yerli gibi keşfedin. Özenle seçilmiş mimari, dünya standartlarında lezzetler ve İtalyan yaşam tarzının zarafetini deneyimleyin."
            TextColor="#455A64"
            FontSize="16"
            LineHeight="1.4" />
