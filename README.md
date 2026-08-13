@@ -12,7 +12,6 @@ Milano Şehir Rehberi, Türk kullancılarının Milano şehri hakkında bilgi sa
 ### Backend
 💎 .Net Maui - Android 10.0 <br />
 💎 SqlLite <br />
-💎 MSSQL Server (+2 Milyon Veri Seti) <br />
 💎 Rapid Api <br />
 💎 Google Gemini: Veri Hazırlama <br />
 
