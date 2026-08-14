@@ -8,6 +8,8 @@ Milano Şehir Rehberi, Türk kullancılarının Milano şehri hakkında bilgi sa
 
 .Net Maui -.Net Android 10.0 temelli, SqLite, rapid api ve xaml teknolojileri geliştirme esnasında kullanıldı.
 
+"Proje işinize yaradıysa veya referans almak isterseniz GitHub üzerinden bir ⭐ bırakarak destek olabilirsiniz, şimdiden teşekkürler!"
+
 ## Kullanılan Teknolojiler
 ### Backend
 💎 .Net Maui - Android 10.0 <br />
