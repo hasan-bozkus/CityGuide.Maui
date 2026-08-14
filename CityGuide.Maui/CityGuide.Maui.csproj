@@ -28,10 +28,10 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
-		<ApplicationTitle>CityGuide.Maui</ApplicationTitle>
+		<ApplicationTitle>Milano Şehir Rehberi</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.cityguide.maui</ApplicationId>
+		<ApplicationId>com.hasanbozkus.cityguide.maui</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -90,6 +90,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CulturePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CustomTabBarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DashboardPage.xaml">

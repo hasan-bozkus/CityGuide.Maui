@@ -5,7 +5,7 @@ namespace CityGuide.Maui.Views;
 public partial class SpecialEventPage : ContentPage
 {
 
-	private readonly EventApiService _eventApiService = new EventApiService();
+	private readonly AppDatabase _appDatabase = new AppDatabase();
     public SpecialEventPage()
 	{
 		InitializeComponent();
@@ -22,7 +22,7 @@ public partial class SpecialEventPage : ContentPage
 
         try
         {
-            var events = await _eventApiService.GetEvnetsAsync();
+            var events = await _appDatabase.GetSpecialEventsAsync();
             EventsCollection.ItemsSource = events;
         }
         catch(Exception ex)

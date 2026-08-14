@@ -1,11 +1,14 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CityGuide.Maui.Models
 {
+    [Table("SpecialEvents")]
     public class SpecialEvent
     {
+        [PrimaryKey, AutoIncrement]
         public int SpecialEventId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

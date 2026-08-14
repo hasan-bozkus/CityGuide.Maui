@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CityGuide.Maui.Views.CustomTabBarPage">
+
+
+    <!-- === ALT NAV BAR === -->
+    <Grid Grid.Row="2"
+ColumnDefinitions="*, *, *, *"
+BackgroundColor="#FFFFFF"
+Padding="0,8"
+HeightRequest="64">
+
+        <!-- Ana Sayfa (aktif) -->
+        <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnHomeTapped" />
+            </VerticalStackLayout.GestureRecognizers>
+            <Label Text="&#xe88a;"
+         FontFamily="MaterialSymbols"
+         FontSize="24"
+         TextColor="#0D47A1"
+         HorizontalOptions="Center" />
+            <Label Text="Ana Sayfa"
+         FontFamily="Inter"
+         FontSize="11"
+         TextColor="#0D47A1"
+         HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <!-- Keşfet -->
+        <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnDiscoverTapped" />
+            </VerticalStackLayout.GestureRecognizers>
+            <Label Text="&#xe87a;"
+         FontFamily="MaterialSymbols"
+         FontSize="24"
+         TextColor="#737783"
+         HorizontalOptions="Center" />
+            <Label Text="Keşfet"
+         FontFamily="Inter"
+         FontSize="11"
+         TextColor="#737783"
+         HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <!-- Etkinlikler -->
+        <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnEventsTapped" />
+            </VerticalStackLayout.GestureRecognizers>
+            <Label Text="&#xe878;"
+         FontFamily="MaterialSymbols"
+         FontSize="24"
+         TextColor="#737783"
+         HorizontalOptions="Center" />
+            <Label Text="Etkinlikler"
+         FontFamily="Inter"
+         FontSize="11"
+         TextColor="#737783"
+         HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+        <!-- Profil (yeni) -->
+        <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center" VerticalOptions="Center">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnProfileTapped" />
+            </VerticalStackLayout.GestureRecognizers>
+            <Label Text="&#xe7fd;" FontFamily="MaterialSymbols" FontSize="24" TextColor="#737783" HorizontalOptions="Center" />
+            <Label Text="Profil" FontFamily="Inter" FontSize="11" TextColor="#737783" HorizontalOptions="Center" />
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentView>

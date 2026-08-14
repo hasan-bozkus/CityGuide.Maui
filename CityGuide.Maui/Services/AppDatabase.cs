@@ -7,12 +7,30 @@ namespace CityGuide.Maui.Services
     {
         private SQLiteAsyncConnection _connection;
 
+        public static async Task<string> GetDatabasePathAsync()
+        {
+            string dbName = "cityguide.db";
+
+            // Cihazın uygulamanıza özel yazılabilir yerel dizini
+            string targetPath = Path.Combine(FileSystem.AppDataDirectory, dbName);
+
+            // Eğer veritabanı cihazın yerel dizininde yoksa, Raw klasöründen kopyala
+            if (!File.Exists(targetPath))
+            {
+                using Stream stream = await FileSystem.OpenAppPackageFileAsync(dbName);
+                using FileStream outputStream = File.Create(targetPath);
+                await stream.CopyToAsync(outputStream);
+            }
+
+            return targetPath;
+        }
+
         private async Task InitAsync()
         {
             if (_connection is not null)
                 return;
 
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "cityguide.db");
+            string dbPath = await GetDatabasePathAsync();
 
             // Dosyanın tam yolunu görelim (SQLite Browser'da açmak için)
             System.Diagnostics.Debug.WriteLine($"[DB PATH] {dbPath}");
@@ -30,6 +48,7 @@ namespace CityGuide.Maui.Services
             await _connection.CreateTableAsync<RouteStop>();
             await _connection.CreateTableAsync<FoodPlace>();
             await _connection.CreateTableAsync<PlaceImage>();
+            await _connection.CreateTableAsync<SpecialEvent>();
         }
 
         // --- Okuma metotları ---
@@ -214,5 +233,13 @@ namespace CityGuide.Maui.Services
                                   .OrderBy(i => i.OrderIndex)
                                   .ToListAsync();
         }
+
+        //special event
+        public async Task<List<SpecialEvent>> GetSpecialEventsAsync()
+        {
+            await InitAsync();
+            return await _connection!.Table<SpecialEvent>().ToListAsync();
+        }
+
     }
 }
